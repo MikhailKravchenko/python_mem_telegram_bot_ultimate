@@ -150,9 +150,10 @@ def handle_docs_audio(message):
     # like
 
     user_id = message.from_user.username
+    message_id=message.message_id
     db_worker = SQLighter(config.database_name)
     # запись информации о меме в бд
-    ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id)
+    ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id)
     db_worker.close()
     # Создаем кнопки и записываем их в переменную
     markup = types.InlineKeyboardMarkup(row_width=1)
@@ -244,15 +245,72 @@ def start(message):
     bot.send_message(message.chat.id, f"Для Гильдии Python")
 
 
-@bot.message_handler(commands=['top'])
+@bot.message_handler(commands=['top7'])
 def get_text_messges(message):
-    db_worker = SQLighter(config.database_name)
-    top = db_worker.ratio_rating_7days()
-    photo_id = top[2]
-    username = top[3]
+    if message.chat.id == -532856839:
+        chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_7days()
+        db_worker.close()
 
-    bot.send_photo(message.chat.id, photo=photo_id)
-    bot.send_message(message.chat.id, f' @{username} Твой мем набрал больше всего лайков на этой неделе')
+        ratio = top[1]
+        photo_id = top[2]
+        username = top[3]
+        message_id = top[5]
+
+        bot.send_photo(chat_id, photo=photo_id)
+        bot.send_message(chat_id,
+                         f' @{username}  Твой мем набрал    {ratio} лайков больше всеех  на этой неделе',
+                         reply_to_message_id=message_id)
+
+    else:
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_7days()
+        db_worker.close()
+
+        ratio = top[1]
+        photo_id = top[2]
+        username = top[3]
+        message_id = top[5]
+
+        bot.send_photo(message.chat.id, photo=photo_id)
+        bot.send_message(message.chat.id,
+                         f' @{username}  Твой мем набрал    {ratio} лайков больше всеех  на этой неделе',
+                         reply_to_message_id=message_id)
+
+
+@bot.message_handler(commands=['top30'])
+def get_text_messges(message):
+    if message.chat.id == -532856839:
+        chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_30days()
+        db_worker.close()
+
+        ratio = top[1]
+        photo_id = top[2]
+        username = top[3]
+        message_id = top[5]
+
+        bot.send_photo(chat_id, photo=photo_id)
+        bot.send_message(chat_id,
+                         f' @{username}  Твой мем набрал    {ratio} лайков, больше всеех в этом месяце',
+                         reply_to_message_id=message_id)
+
+    else:
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_7days()
+        db_worker.close()
+
+        ratio = top[1]
+        photo_id = top[2]
+        username = top[3]
+        message_id = top[5]
+
+        bot.send_photo(message.chat.id, photo=photo_id)
+        bot.send_message(message.chat.id,
+                         f' @{username}  Твой мем набрал    {ratio} лайков больше всеех  на этой неделе',
+                         reply_to_message_id=message_id)
 
 
 @bot.message_handler(content_types=['text'])
