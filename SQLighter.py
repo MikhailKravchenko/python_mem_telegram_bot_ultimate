@@ -91,4 +91,6 @@ class SQLighter:
 
         return ratio_value
 
-
+    def close(self):
+        """ Закрываем текущее соединение с БД """
+        self.connection.close()
