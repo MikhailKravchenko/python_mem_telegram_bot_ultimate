@@ -201,7 +201,7 @@ def handle_docs_audio(message):
         else:
 
             if hash_images in rows:
-                bot.send_message(message.chat.id, f"Алярм!!! Нас кормят боянами 99%")
+                bot.send_message(message.chat.id, f"Алярм!!! Наас кормят боянами 99%")
                 bot.send_photo(message.chat.id, photo=rows.get(hash_images))
 
             # проверяем на 95% совпадение хэшей
