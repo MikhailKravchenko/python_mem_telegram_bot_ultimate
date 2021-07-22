@@ -300,7 +300,7 @@ def get_text_messges(message):
 
         bot.send_photo(chat_id, photo=photo_id)
         bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал    {ratio} лайков - больше всеех в этом месяце',
+                         f' @{username}  Твой мем набрал    {ratio} лайков - больше всех в этом месяце',
                          reply_to_message_id=message_id)
 
     else:
