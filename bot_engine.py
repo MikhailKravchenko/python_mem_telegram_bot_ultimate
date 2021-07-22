@@ -317,7 +317,7 @@ def get_text_messges(message):
 
         try:
            bot.send_message(message.chat.id,
-                                      f' @{username}  Твой мем набрал    {ratio} лайков, больше всеех в этом месяце',
+                                      f' @{username}  Твой мем набрал    {ratio} лайков, больше всех в этом месяце',
                                       reply_to_message_id=message_id)
         except:
             bot.send_message(message.chat.id,
