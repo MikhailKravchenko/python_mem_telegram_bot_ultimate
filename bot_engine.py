@@ -209,7 +209,7 @@ def handle_docs_audio(message):
                 for key in rows.keys():
                     count = hash_image.CompareHash(key, hash_images)
                     if count <= 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
                         bot.send_photo(message.chat.id, photo=rows.get(key))
                         break
 
