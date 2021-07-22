@@ -282,7 +282,7 @@ def get_text_messges(message):
                              reply_to_message_id=message_id)
         except:
             bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал    {ratio} лайков - больше всеех  на этой неделе')
+                             f' @{username}  Твой мем набрал    {ratio} лайков - больше всех  на этой неделе')
 
 
 @bot.message_handler(commands=['top30'])
