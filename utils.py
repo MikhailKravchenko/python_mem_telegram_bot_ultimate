@@ -6,7 +6,6 @@ import config
 
 from config import shelve_name, shelve_level
 
-bot = telebot.TeleBot(config.token)
 
 def set_id_photo_for_chat(chat_id, args):
     """
