@@ -1,4 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
+'''Github Action rules'''
 
 # @pirog - telegram
 import os
