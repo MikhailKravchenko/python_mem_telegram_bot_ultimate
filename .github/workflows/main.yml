@@ -40,6 +40,8 @@ jobs:
           script: |
               whoami
               cd /home/lukas/testproject/pythom_mem_telegram_bot_ultimate/
+              ll
+              ls -la
               git reset --hard
               git pull --force origin main
               cd /home/lukas/testproject/ && chmod 777 -R pythom_mem_telegram_bot_ultimate/
