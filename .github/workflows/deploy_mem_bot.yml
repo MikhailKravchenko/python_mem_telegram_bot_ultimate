@@ -19,9 +19,11 @@ jobs:
     steps:
     
     - name: Executing remote command
-      with:
-        host: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
-        script: ls
+      uses: appleboy/ssh-action@master
+      run: echo Hello!
+      #with:
+      #  host: ${{ secrets.HOST }}
+      #  USERNAME: ${{ secrets.USERNAME }}
+      #  PORT: ${{ secrets.PORT }}
+      #  KEY: ${{ secrets.SSHKEY }}
+      #  script: ls
