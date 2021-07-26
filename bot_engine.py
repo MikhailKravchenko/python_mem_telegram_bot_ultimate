@@ -6,12 +6,13 @@ import random
 import threading
 import utils
 import config
+import env
 import telebot
 from telebot import types
 import hash_image
 from SQLighter import SQLighter
 
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(env.token)
 
 """"
 отправка мема в чат
@@ -209,7 +210,7 @@ def handle_docs_audio(message):
                 for key in rows.keys():
                     count = hash_image.CompareHash(key, hash_images)
                     if count <= 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
                         bot.send_photo(message.chat.id, photo=rows.get(key))
                         break
 

@@ -2,10 +2,7 @@
 import os
 
 
-'''Test git action'''
 
-
-token = ''
 
 database_name = 'db.sqlite3'  # Файл с базой данных
 shelve_name = 'shelve.db'  #
