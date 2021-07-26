@@ -6,12 +6,13 @@ import random
 import threading
 import utils
 import config
+import env
 import telebot
 from telebot import types
 import hash_image
 from SQLighter import SQLighter
 
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(env.token)
 
 """"
 отправка мема в чат
