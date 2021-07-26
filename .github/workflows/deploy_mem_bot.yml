@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: appleboy/ssh-action@master
+    - uses: appleboy/ssh-action@main
     - name: Executing remote command
     
       run: echo Hello!
