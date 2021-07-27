@@ -47,7 +47,5 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-            cd ~
-            pwd
-            ls -la
+            /home/lukas/testproject/deploy2.sh
        
