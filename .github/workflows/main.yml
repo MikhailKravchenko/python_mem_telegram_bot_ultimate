@@ -38,7 +38,6 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-            su - deploy
-            whoami
-            sudo /home/lukas/testproject/deploy2.sh
+            cd ~
+            ls -la
        
