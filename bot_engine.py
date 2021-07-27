@@ -302,12 +302,12 @@ def get_text_messges(message):
 
         bot.send_photo(chat_id, photo=photo_id)
         bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце',
+                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце!',
                          reply_to_message_id=message_id)
 
     else:
         db_worker = SQLighter(config.database_name)
-        top = db_worker.ratio_rating_7days()
+        top = db_worker.ratio_rating_30days()
         db_worker.close()
 
         ratio = top[1]
@@ -319,11 +319,11 @@ def get_text_messges(message):
 
         try:
            bot.send_message(message.chat.id,
-                                      f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце',
+                                      f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце!',
                                       reply_to_message_id=message_id)
         except:
             bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце')
+                             f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце!')
 
 
 @bot.message_handler(content_types=['text'])
