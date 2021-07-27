@@ -280,11 +280,11 @@ def get_text_messges(message):
         bot.send_photo(message.chat.id, photo=photo_id)
         try:
             bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал    {ratio} лайков - больше всех  на этой неделе',
+                             f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
                              reply_to_message_id=message_id)
         except:
             bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал    {ratio} лайков - больше всех  на этой неделе')
+                             f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
 
 
 @bot.message_handler(commands=['top30'])
@@ -302,7 +302,7 @@ def get_text_messges(message):
 
         bot.send_photo(chat_id, photo=photo_id)
         bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал    {ratio} лайков - больше всех в этом месяце',
+                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце',
                          reply_to_message_id=message_id)
 
     else:
@@ -319,11 +319,11 @@ def get_text_messges(message):
 
         try:
            bot.send_message(message.chat.id,
-                                      f' @{username}  Твой мем набрал    {ratio} лайков, больше всех в этом месяце',
+                                      f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце',
                                       reply_to_message_id=message_id)
         except:
             bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал    {ratio} лайков, больше всех в этом месяце')
+                             f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце')
 
 
 @bot.message_handler(content_types=['text'])
