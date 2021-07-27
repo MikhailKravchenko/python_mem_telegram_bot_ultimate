@@ -39,5 +39,6 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd ~
+            pwd
             ls -la
        
