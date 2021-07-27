@@ -47,7 +47,7 @@ def lession(message):
         chat_id = -1001210399850
 
         bot.send_message(chat_id,
-                         f"Зарплатонька пришла")
+                         f"Зарплатонька пришла!")
         video_id = 'BAACAgIAAxkBAAIEcmDZoRe-LA3QzjetEJdOTezCAAGu5wACpgoAAmt1WEo3ZqrbnJ8IkyAE'
         bot.send_video(chat_id, video_id)
     else:
@@ -302,7 +302,7 @@ def get_text_messges(message):
 
         bot.send_photo(chat_id, photo=photo_id)
         bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце!',
+                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце',
                          reply_to_message_id=message_id)
 
     else:
