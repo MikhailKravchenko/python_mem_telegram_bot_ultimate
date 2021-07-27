@@ -38,9 +38,10 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           script: |
-              whoami
+              echo $USER
               cd /home/lukas/testproject/pythom_mem_telegram_bot_ultimate/
-              ll
+              w
+              pwd
               ls -la
               git reset --hard
               git pull --force origin main
