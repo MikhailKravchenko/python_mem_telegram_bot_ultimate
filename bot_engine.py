@@ -47,7 +47,7 @@ def lession(message):
         chat_id = -1001210399850
 
         bot.send_message(chat_id,
-                         f"Зарплатонька пришла!")
+                         f"Зарплатонька пришла! <3")
         video_id = 'BAACAgIAAxkBAAIEcmDZoRe-LA3QzjetEJdOTezCAAGu5wACpgoAAmt1WEo3ZqrbnJ8IkyAE'
         bot.send_video(chat_id, video_id)
     else:
