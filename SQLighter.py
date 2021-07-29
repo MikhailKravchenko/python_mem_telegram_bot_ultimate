@@ -82,8 +82,7 @@ class SQLighter:
 
 
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio) ').fetchall()
-
+                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\'))) ').fetchall()
         for value in ratio_value:
 
              ratio_value=value
@@ -95,7 +94,7 @@ class SQLighter:
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio) ').fetchall()
+                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-30 day\'))) ').fetchall()
 
         for value in ratio_value:
             ratio_value = value
