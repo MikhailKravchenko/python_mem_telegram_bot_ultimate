@@ -37,22 +37,44 @@ class SQLighter:
             self.cursor.execute(
                 'UPDATE ratio set ratio_value =ratio_value+ 1 where ratio_id=' + str(ratio_id))
 
+    def update_ratio_dislike(self, ratio_id):
+        with self.connection:
+            self.cursor.execute(
+                'UPDATE ratio set ratio_dislike_value =ratio_dislike_value+ 1 where ratio_id=' + str(ratio_id))
+
     def update_ratio_to_like(self, ratio_id, user_id):
         with self.connection:
             self.cursor.execute(
                 'INSERT INTO ratio_like (user_id, ratio_id) VALUES (''\'' + str(user_id) + '\',\'' + str(
                     ratio_id) + '\''')')
 
-    def update_ratio_dislike(self, ratio_id):
+    def update_ratio_to_dislike(self, ratio_id, user_id):
         with self.connection:
             self.cursor.execute(
-                'UPDATE ratio set ratio_value =ratio_value- 1 where ratio_id=' + str(ratio_id))
+                'INSERT INTO ratio_dislike (user_id, ratio_id) VALUES (''\'' + str(user_id) + '\',\'' + str(
+                    ratio_id) + '\''')')
+
+
+
 
     def select_ratio_value(self, ratio_id):
         with self.connection:
 
             ratio_value = self.cursor.execute(
                 'SELECT ratio_value from ratio where ratio_id=' + str(ratio_id)).fetchall()
+
+        for value in ratio_value:
+            for ratio_value in value:
+                ratio_value = ratio_value
+        return ratio_value
+
+        return ratio_value
+
+    def select_ratio_dislike_value(self, ratio_id):
+        with self.connection:
+
+            ratio_value = self.cursor.execute(
+                'SELECT ratio_dislike_value from ratio where ratio_id=' + str(ratio_id)).fetchall()
 
         for value in ratio_value:
             for ratio_value in value:
@@ -74,6 +96,18 @@ class SQLighter:
         else:
             return True
 
+    def select_ratio_to_dislike_to_user(self, ratio_id, user_id):
+
+
+        with self.connection:
+
+            ratio_value = self.cursor.execute(
+                'SELECT ratio_dislike_id from ratio_dislike where ratio_id=' + str(ratio_id) + ' and user_id=' '\'' +str(user_id)+'\'').fetchall()
+        if ratio_value == []:
+
+            return False
+        else:
+            return True
 
     def ratio_rating_7days(self):
 
