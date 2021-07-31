@@ -4,6 +4,7 @@
 # @pirog - telegram
 import os
 import random
+import re
 import threading
 import utils
 import config
@@ -116,30 +117,69 @@ def handler_new_member(message):
 @bot.callback_query_handler(func=lambda c: True)
 def callback(c):
     data = c.data
-    callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
-    user_id = c.from_user.username
+    clear_data = re.sub(r'[^\w\s]+|[\d]+', r'',data).strip()
+    if clear_data == 'Like_':
 
-    db_worker = SQLighter(config.database_name)
-    like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
+        callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
 
-    if like == True:
-        bot.answer_callback_query(c.id, text='Вы уже голосовали')
-        db_worker.close()
-    else:
+        user_id = c.from_user.username
 
-        db_worker.update_ratio_like(callback_ratio_id)
-        db_worker.update_ratio_to_like(callback_ratio_id, user_id)
-        ratio_value = db_worker.select_ratio_value(callback_ratio_id)
-        db_worker.close()
+        db_worker = SQLighter(config.database_name)
+        like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
 
-        ratio_value = u'\U0001F497' + ' ' + str(ratio_value)
-        markup = types.InlineKeyboardMarkup(row_width=1)
-        bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
-        markup.add(bt1)
-        bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
-        bot.answer_callback_query(c.id, text='Ваш голос учтен')
+        if like == True:
+            bot.answer_callback_query(c.id, text='Вы уже голосовали')
+            db_worker.close()
+        else:
 
-        # bot.answer_callback_query(c.message.chat.id, 'Конфиг пуст', reply_markup=markup)
+            db_worker.update_ratio_like(callback_ratio_id)
+            db_worker.update_ratio_to_like(callback_ratio_id, user_id)
+            ratio_value = db_worker.select_ratio_value(callback_ratio_id)
+            ratio_dislike_value = db_worker.select_ratio_dislike_value(callback_ratio_id)
+            db_worker.close()
+
+            ratio_value = u'\U0001F49A' + ' ' + str(ratio_value)
+            ratio_dislike_value = u'\U0001F621' + ' ' + str(ratio_dislike_value)
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
+            bt2 = types.InlineKeyboardButton(ratio_dislike_value, callback_data='Dislike_' + str(callback_ratio_id))
+
+            markup.add(bt1, bt2)
+            bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
+            bot.answer_callback_query(c.id, text='Ваш голос учтен')
+
+            # bot.answer_callback_query(c.message.chat.id, 'Конфиг пуст', reply_markup=markup)
+    if clear_data == 'Dislike_':
+
+        callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
+
+        user_id = c.from_user.username
+
+        db_worker = SQLighter(config.database_name)
+        like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
+
+        if like == True:
+            bot.answer_callback_query(c.id, text='Вы уже голосовали')
+            db_worker.close()
+        else:
+
+            db_worker.update_ratio_dislike(callback_ratio_id)
+            db_worker.update_ratio_to_dislike(callback_ratio_id, user_id)
+            ratio_value = db_worker.select_ratio_value(callback_ratio_id)
+            ratio_dislike_value= db_worker.select_ratio_dislike_value(callback_ratio_id)
+            db_worker.close()
+
+            ratio_value = u'\U0001F49A' + ' ' + str(ratio_value)
+            ratio_dislike_value= u'\U0001F621' + ' ' + str(ratio_dislike_value)
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
+            bt2 = types.InlineKeyboardButton(ratio_dislike_value, callback_data='Dislike_' + str(callback_ratio_id))
+
+            markup.add(bt1,bt2)
+            bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
+            bot.answer_callback_query(c.id, text='Ваш голос учтен')
+
+            # bot.answer_callback_query(c.message.chat.id, 'Конфиг пуст', reply_markup=markup)
 
 
 """Сбор фото мемов"""
@@ -160,7 +200,8 @@ def handle_docs_audio(message):
     # Создаем кнопки и записываем их в переменную
     markup = types.InlineKeyboardMarkup(row_width=1)
     bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
-    markup.add(bt1)
+    bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
+    markup.add(bt1,bt2)
     bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                      reply_markup=markup)
 
