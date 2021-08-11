@@ -42,7 +42,7 @@ def lession(message):
         bot.send_photo(message.chat.id, photo=photo_id)
 
 
-@bot.message_handler(commands=['happy'])
+@bot.message_handler(commands=['happy1'])
 def lession(message):
     if message.chat.id == -532856839:
         chat_id = -1001210399850
@@ -58,7 +58,22 @@ def lession(message):
         video_id = 'BAACAgIAAxkBAAIEcmDZoRe-LA3QzjetEJdOTezCAAGu5wACpgoAAmt1WEo3ZqrbnJ8IkyAE'
         bot.send_video(message.chat.id, video_id)
 
-    # достаем список сохраненных id изображений
+
+@bot.message_handler(commands=['happy2'])
+def lession(message):
+    if message.chat.id == -532856839:
+        chat_id = -1001210399850
+
+        bot.send_message(chat_id,
+                         f"Зарплатонька пришла! <3")
+        video_id = 'BAACAgIAAxkBAAIF7WETfRw8K1_iDaks2SY9TnhRMtmYAALBEQACEs2ZSDzrW4IZoA1wIAQ'
+        bot.send_video(chat_id, video_id)
+    else:
+
+        bot.send_message(message.chat.id,
+                         f"Зарплатонька пришла!")
+        video_id = 'BAACAgIAAxkBAAIF7WETfRw8K1_iDaks2SY9TnhRMtmYAALBEQACEs2ZSDzrW4IZoA1wIAQ'
+        bot.send_video(message.chat.id, video_id)
 
 
 @bot.message_handler(commands=['gud'])
@@ -371,13 +386,14 @@ def get_text_messges(message):
 def get_text_messages(message):
     # Отсылаем в чат
     # AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E
-
     if message.text == "Как тебе мем?":
         photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
 
         bot.send_photo(message.chat.id, photo=photo_id)
     else:
         None
+
+
 
 
 if __name__ == '__main__':
