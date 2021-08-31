@@ -132,7 +132,7 @@ def handler_new_member(message):
 @bot.callback_query_handler(func=lambda c: True)
 def callback(c):
     data = c.data
-    clear_data = re.sub(r'[^\w\s]+|[\d]+', r'',data).strip()
+    clear_data = re.sub(r'[^\w\s]+|[\d]+', r'', data).strip()
     if clear_data == 'Like_':
 
         callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
@@ -181,16 +181,16 @@ def callback(c):
             db_worker.update_ratio_dislike(callback_ratio_id)
             db_worker.update_ratio_to_dislike(callback_ratio_id, user_id)
             ratio_value = db_worker.select_ratio_value(callback_ratio_id)
-            ratio_dislike_value= db_worker.select_ratio_dislike_value(callback_ratio_id)
+            ratio_dislike_value = db_worker.select_ratio_dislike_value(callback_ratio_id)
             db_worker.close()
 
             ratio_value = u'\U0001F49A' + ' ' + str(ratio_value)
-            ratio_dislike_value= u'\U0001F621' + ' ' + str(ratio_dislike_value)
+            ratio_dislike_value = u'\U0001F621' + ' ' + str(ratio_dislike_value)
             markup = types.InlineKeyboardMarkup(row_width=1)
             bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
             bt2 = types.InlineKeyboardButton(ratio_dislike_value, callback_data='Dislike_' + str(callback_ratio_id))
 
-            markup.add(bt1,bt2)
+            markup.add(bt1, bt2)
             bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
             bot.answer_callback_query(c.id, text='Ваш голос учтен')
 
@@ -207,16 +207,17 @@ def handle_docs_audio(message):
     # like
 
     user_id = message.from_user.username
-    message_id=message.message_id
+    message_id = message.message_id
     db_worker = SQLighter(config.database_name)
+    data_id=0
     # запись информации о меме в бд
-    ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id)
+    ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id,data_id)
     db_worker.close()
     # Создаем кнопки и записываем их в переменную
     markup = types.InlineKeyboardMarkup(row_width=1)
     bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
     bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
-    markup.add(bt1,bt2)
+    markup.add(bt1, bt2)
     bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                      reply_markup=markup)
 
@@ -311,17 +312,31 @@ def get_text_messges(message):
         top = db_worker.ratio_rating_7days()
         db_worker.close()
 
+
         ratio = top[1]
         photo_id = top[2]
         username = top[3]
         message_id = top[5]
+        data_id = top[7]
 
-
-
-        bot.send_photo(chat_id, photo=photo_id)
-        bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал    {ratio} лайков - больше всех  на этой неделе',
-                         reply_to_message_id=message_id)
+        if int(data_id) == 0:
+            bot.send_photo(chat_id, photo=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+        elif int(data_id) == 1:
+            bot.send_video(chat_id, data=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
 
     else:
         db_worker = SQLighter(config.database_name)
@@ -332,15 +347,26 @@ def get_text_messges(message):
         photo_id = top[2]
         username = top[3]
         message_id = top[5]
-
-        bot.send_photo(message.chat.id, photo=photo_id)
-        try:
-            bot.send_message(message.chat.id,
+        data_id = top[7]
+        if int(data_id) == 0:
+            bot.send_photo(message.chat.id, photo=photo_id)
+            try:
+                bot.send_message(message.chat.id,
                              f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
                              reply_to_message_id=message_id)
-        except:
-            bot.send_message(message.chat.id,
+            except:
+                bot.send_message(message.chat.id,
                              f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+        elif int(data_id) == 1:
+            bot.send_video(message.chat.id, data = photo_id)
+            try:
+                bot.send_message(message.chat.id,
+                             f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                             reply_to_message_id=message_id)
+            except:
+                bot.send_message(message.chat.id,
+                             f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+
 
 
 @bot.message_handler(commands=['top30'])
@@ -355,11 +381,26 @@ def get_text_messges(message):
         photo_id = top[2]
         username = top[3]
         message_id = top[5]
+        data_id = top[7]
 
-        bot.send_photo(chat_id, photo=photo_id)
-        bot.send_message(chat_id,
-                         f' @{username}  Твой мем набрал {ratio} лайков - больше всех в этом месяце',
-                         reply_to_message_id=message_id)
+        if int(data_id) == 0:
+            bot.send_photo(chat_id, photo=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+        elif int(data_id) == 1:
+            bot.send_video(chat_id, data=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
 
     else:
         db_worker = SQLighter(config.database_name)
@@ -370,17 +411,26 @@ def get_text_messges(message):
         photo_id = top[2]
         username = top[3]
         message_id = top[5]
-        bot.send_photo(message.chat.id, photo=photo_id)
+        data_id = top[7]
 
-
-        try:
-           bot.send_message(message.chat.id,
-                                      f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце!',
-                                      reply_to_message_id=message_id)
-        except:
-            bot.send_message(message.chat.id,
-                             f' @{username}  Твой мем набрал {ratio} лайков, больше всех в этом месяце!')
-
+        if int(data_id) == 0:
+            bot.send_photo(message.chat.id, photo=photo_id)
+            try:
+                bot.send_message(message.chat.id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(message.chat.id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+        elif int(data_id) == 1:
+            bot.send_video(message.chat.id, data=photo_id)
+            try:
+                bot.send_message(message.chat.id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(message.chat.id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
@@ -394,6 +444,24 @@ def get_text_messages(message):
         None
 
 
+@bot.message_handler(content_types=['video'])
+def get_text_messages(message):
+    video_id = message.video.file_id
+
+    user_id = message.from_user.username
+    message_id = message.message_id
+    data_id = 1
+    db_worker = SQLighter(config.database_name)
+    # запись информации о меме в бд
+    ratio_id = db_worker.creator_photo_ratio(message, video_id, user_id, message_id, data_id)
+    db_worker.close()
+    # Создаем кнопки и записываем их в переменную
+    markup = types.InlineKeyboardMarkup(row_width=1)
+    bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
+    bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
+    markup.add(bt1, bt2)
+    bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+                     reply_markup=markup)
 
 
 if __name__ == '__main__':
