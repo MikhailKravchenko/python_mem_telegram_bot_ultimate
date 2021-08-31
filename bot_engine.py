@@ -304,6 +304,7 @@ def start(message):
     bot.send_message(message.chat.id, f"Для Гильдии Python")
 
 
+
 @bot.message_handler(commands=['top7'])
 def get_text_messges(message):
     if message.chat.id == -532856839:
@@ -432,16 +433,6 @@ def get_text_messges(message):
                 bot.send_message(message.chat.id,
                                  f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
 
-@bot.message_handler(content_types=['text'])
-def get_text_messages(message):
-    # Отсылаем в чат
-    # AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E
-    if message.text == "Как тебе мем?":
-        photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
-
-        bot.send_photo(message.chat.id, photo=photo_id)
-    else:
-        None
 
 
 @bot.message_handler(content_types=['video'])
@@ -462,6 +453,36 @@ def get_text_messages(message):
     markup.add(bt1, bt2)
     bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                      reply_markup=markup)
+
+
+@bot.message_handler(commands=['message'])
+def start1(message):
+    if message.chat.id == -532856839:
+        # Отсылаем в чат
+        message.chat.id = -1001210399850
+        text = message.text[9:]
+        bot.send_message(message.chat.id, text)
+    else:
+        text = message.text[9:]
+
+        bot.send_message(message.chat.id, text)
+
+
+
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message):
+    # Отсылаем в чат
+    # AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E
+    if message.text == "Как тебе мем?":
+        photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
+
+        bot.send_photo(message.chat.id, photo=photo_id)
+    else:
+        None
+
+
+
 
 
 if __name__ == '__main__':
