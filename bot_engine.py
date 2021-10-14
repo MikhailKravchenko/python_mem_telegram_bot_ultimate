@@ -472,6 +472,12 @@ def start1(message):
     rows = utils.get_hush_photo_for_chat(message.chat.id)
     for key in rows.keys():
         bot.send_photo(message.chat.id, photo=rows[key])
+        file_info = bot.get_file(rows[key])
+        downloaded_file = bot.download_file(file_info.file_path)
+        src = os.getcwd() + '\\image2\\' + rows[key];
+        with open(src, 'wb') as new_file:
+            new_file.write(downloaded_file)
+        break
 
 
 @bot.message_handler(content_types=['text'])
