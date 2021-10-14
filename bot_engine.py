@@ -467,7 +467,10 @@ def start1(message):
 
         bot.send_message(message.chat.id, text)
 
-
+@bot.message_handler(commands=['hash'])
+def start1(message):
+    rows = utils.get_hush_photo_for_chat(message.chat.id)
+    print(len(rows))
 
 
 @bot.message_handler(content_types=['text'])
