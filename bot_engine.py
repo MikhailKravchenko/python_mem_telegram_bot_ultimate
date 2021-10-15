@@ -535,7 +535,7 @@ def start1(message):
     rows = utils.get_hush_photo_for_chat(-1001210399850)
     i=0
     for key in rows.keys():
-        if i <700:
+        if i <1198:
             i+=1
         else:
 
