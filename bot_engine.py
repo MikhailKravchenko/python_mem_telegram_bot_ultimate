@@ -513,50 +513,50 @@ def start1(message):
 
         bot.send_message(message.chat.id, text)
 
-@bot.message_handler(commands=['hash_download'])
-def start1(message):
-    rows = utils.get_hush_photo_for_chat(message.chat.id)
-    for key in rows.keys():
-        bot.send_photo(message.chat.id, photo=rows[key])
-        file_info = bot.get_file(rows[key])
-        downloaded_file = bot.download_file(file_info.file_path)
-        src = os.getcwd() + '\\image2\\' + rows[key] + '.jpg';
-        with open(src, 'wb') as new_file:
-            new_file.write(downloaded_file)
-
-@bot.message_handler(commands=['hash_sendphoto'])
-def start1(message):
-    rows = utils.get_hush_photo_for_chat(message.chat.id)
-    for key in rows.keys():
-        bot.send_photo(message.chat.id, photo=rows[key])
-
-@bot.message_handler(commands=['hash_sendphoto_from_memchat'])
-def start1(message):
-    rows = utils.get_hush_photo_for_chat(-1001210399850)
-    i=0
-    for key in rows.keys():
-        if i <1198:
-            i+=1
-        else:
-
-            if i % 20 ==0:
-                time.sleep(3)
-                bot.send_photo(message.chat.id, photo=rows[key])
-                i+=1
-            else:
-                bot.send_photo(message.chat.id, photo=rows[key])
-                i+=1
-
-
-@bot.message_handler(commands=['hash_len_memchat'])
-def start1(message):
-    rows = utils.get_hush_photo_for_chat(-1001210399850)
-    bot.send_message(message.chat.id, len(rows))
-
-@bot.message_handler(commands=['hash_len'])
-def start1(message):
-    rows = utils.get_hush_photo_for_chat(message.chat.id)
-    bot.send_message(message.chat.id, len(rows))
+# @bot.message_handler(commands=['hash_download'])
+# def start1(message):
+#     rows = utils.get_hush_photo_for_chat(message.chat.id)
+#     for key in rows.keys():
+#         bot.send_photo(message.chat.id, photo=rows[key])
+#         file_info = bot.get_file(rows[key])
+#         downloaded_file = bot.download_file(file_info.file_path)
+#         src = os.getcwd() + '\\image2\\' + rows[key] + '.jpg';
+#         with open(src, 'wb') as new_file:
+#             new_file.write(downloaded_file)
+#
+# @bot.message_handler(commands=['hash_sendphoto'])
+# def start1(message):
+#     rows = utils.get_hush_photo_for_chat(message.chat.id)
+#     for key in rows.keys():
+#         bot.send_photo(message.chat.id, photo=rows[key])
+#
+# @bot.message_handler(commands=['hash_sendphoto_from_memchat'])
+# def start1(message):
+#     rows = utils.get_hush_photo_for_chat(-1001210399850)
+#     i=0
+#     for key in rows.keys():
+#         if i <1198:
+#             i+=1
+#         else:
+#
+#             if i % 20 ==0:
+#                 time.sleep(3)
+#                 bot.send_photo(message.chat.id, photo=rows[key])
+#                 i+=1
+#             else:
+#                 bot.send_photo(message.chat.id, photo=rows[key])
+#                 i+=1
+#
+#
+# @bot.message_handler(commands=['hash_len_memchat'])
+# def start1(message):
+#     rows = utils.get_hush_photo_for_chat(-1001210399850)
+#     bot.send_message(message.chat.id, len(rows))
+#
+# @bot.message_handler(commands=['hash_len'])
+# def start1(message):
+#     rows = utils.get_hush_photo_for_chat(message.chat.id)
+#     bot.send_message(message.chat.id, len(rows))
 
 
 @bot.message_handler(content_types=['text'])
