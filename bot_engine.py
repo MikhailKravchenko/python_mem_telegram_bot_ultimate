@@ -535,13 +535,17 @@ def start1(message):
     rows = utils.get_hush_photo_for_chat(-1001210399850)
     i=0
     for key in rows.keys():
-        if i % 20 ==0:
-            time.sleep(3)
-            bot.send_photo(message.chat.id, photo=rows[key])
+        if i <700:
             i+=1
         else:
-            bot.send_photo(message.chat.id, photo=rows[key])
-            i+=1
+
+            if i % 20 ==0:
+                time.sleep(3)
+                bot.send_photo(message.chat.id, photo=rows[key])
+                i+=1
+            else:
+                bot.send_photo(message.chat.id, photo=rows[key])
+                i+=1
 
 
 @bot.message_handler(commands=['hash_len_memchat'])
