@@ -535,7 +535,7 @@ def start1(message):
     rows = utils.get_hush_photo_for_chat(-1001210399850)
     for key in rows.keys():
         bot.send_photo(message.chat.id, photo=rows[key])
-        time.sleep(0.05)
+        time.sleep(0.1)
 
 @bot.message_handler(commands=['hash_len_memchat'])
 def start1(message):
