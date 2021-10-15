@@ -14,6 +14,7 @@ from telebot import types
 import hash_image
 from SQLighter import SQLighter
 
+
 bot = telebot.TeleBot(env.token)
 
 """"
@@ -203,8 +204,8 @@ def callback(c):
 @bot.message_handler(content_types=['photo'])
 def handle_docs_audio(message):
     # достаем id изображения
-    photo_id = message.photo[0].file_id
-    # like
+    photo_id = message.photo[-1].file_id
+   # like
 
     user_id = message.from_user.username
     message_id = message.message_id
@@ -222,7 +223,7 @@ def handle_docs_audio(message):
                      reply_markup=markup)
 
     # Сохраняем фото
-    file_info = bot.get_file(photo_id)
+    file_info = bot.get_file(message.photo[-1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
     src = os.getcwd() + '\\image\\' + photo_id;
     with open(src, 'wb') as new_file:
@@ -236,64 +237,50 @@ def handle_docs_audio(message):
         None
 
     # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
-    rows = utils.get_hush_photo_for_chat(message.chat.id)
-    if rows == None:
-        rows = dict()
-        rows[hash_images] = photo_id
-        utils.set_hash_photo_for_chat(message.chat.id, rows)
-
-        answer = utils.get_answer_for_user(message.chat.id)
-        if answer == None:
-            answer = []
-
-            answer.append(photo_id)
-
-            utils.set_id_photo_for_chat(message.chat.id, answer)
-        else:
-            answer.append(photo_id)
+    db_worker = SQLighter(config.database_name)
+    # запись информации о меме в бд
+    rows = db_worker.select_hash_images(message.chat.id)
+    db_worker.close()
 
     # Смотрим есть ли в нашем словаре такой хэш, проверяем на боян
+    if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
+        bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
     else:
-        if str(hash_images) == '0000111100011111011111111000000000001111100011111001111110111111':
-            bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
+        if hash_images in rows:
+            bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
+            db_worker = SQLighter(config.database_name)
+            bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
+            db_worker.close()
 
+        # проверяем на 95% совпадение хэшей
         else:
+            for key in rows:
 
-            if hash_images in rows:
-                bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
-                bot.send_photo(message.chat.id, photo=rows.get(hash_images))
-
-            # проверяем на 95% совпадение хэшей
+                count = hash_image.CompareHash(key, hash_images)
+                if count < 2:
+                    bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
+                    db_worker = SQLighter(config.database_name)
+                    bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
+                    db_worker.close()
+                    break
+            # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
+            db_worker = SQLighter(config.database_name)
+            db_worker.insert_hash_image(hash_images, photo_id, message.chat.id)
+            answer = utils.get_answer_for_user(message.chat.id)
+            if answer == None:
+                answer = []
+                answer.append(photo_id)
+                utils.set_id_photo_for_chat(message.chat.id, answer)
             else:
-                for key in rows.keys():
-                    count = hash_image.CompareHash(key, hash_images)
-                    if count < 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
-                        bot.send_photo(message.chat.id, photo=rows.get(key))
-                        break
-
-                # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
-                rows[hash_images] = photo_id
-                utils.set_hash_photo_for_chat(message.chat.id, rows)
-
-                answer = utils.get_answer_for_user(message.chat.id)
-                if answer == None:
-                    answer = []
-
+                # chat_id memes_guild = -1001210399850
+                if message.chat.id == -532856839:
+                    message.chat.id = -1001210399850
+                    answer = utils.get_answer_for_user(message.chat.id)
                     answer.append(photo_id)
-
                     utils.set_id_photo_for_chat(message.chat.id, answer)
                 else:
-                    # chat_id memes_guild = -1001210399850
-                    if message.chat.id == -532856839:
-                        message.chat.id = -1001210399850
-                        answer = utils.get_answer_for_user(message.chat.id)
-                        answer.append(photo_id)
-                        utils.set_id_photo_for_chat(message.chat.id, answer)
-                    else:
-
-                        answer.append(photo_id)
-                        utils.set_id_photo_for_chat(message.chat.id, answer)
+                    answer.append(photo_id)
+                    utils.set_id_photo_for_chat(message.chat.id, answer)
 
 
 """"Меню старт"""
@@ -467,17 +454,32 @@ def start1(message):
 
         bot.send_message(message.chat.id, text)
 
-@bot.message_handler(commands=['hash2323'])
+@bot.message_handler(commands=['hash_download'])
 def start1(message):
     rows = utils.get_hush_photo_for_chat(message.chat.id)
     for key in rows.keys():
         bot.send_photo(message.chat.id, photo=rows[key])
         file_info = bot.get_file(rows[key])
         downloaded_file = bot.download_file(file_info.file_path)
-        src = os.getcwd() + '\\image2\\' + rows[key];
+        src = os.getcwd() + '\\image2\\' + rows[key] + '.jpg';
         with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
-        break
+
+@bot.message_handler(commands=['hash_sendphoto]'])
+def start1(message):
+    rows = utils.get_hush_photo_for_chat(message.chat.id)
+    for key in rows.keys():
+        bot.send_photo(message.chat.id, photo=rows[key])
+
+@bot.message_handler(commands=['hash_len_memchat'])
+def start1(message):
+    rows = utils.get_hush_photo_for_chat(-1001210399850)
+    bot.send_message(message.chat.id, len(rows))
+
+@bot.message_handler(commands=['hash_len'])
+def start1(message):
+    rows = utils.get_hush_photo_for_chat(message.chat.id)
+    bot.send_message(message.chat.id, len(rows))
 
 
 @bot.message_handler(content_types=['text'])
