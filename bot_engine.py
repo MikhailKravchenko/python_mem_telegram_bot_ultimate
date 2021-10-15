@@ -203,84 +203,141 @@ def callback(c):
 
 @bot.message_handler(content_types=['photo'])
 def handle_docs_audio(message):
-    # достаем id изображения
-    photo_id = message.photo[-1].file_id
-   # like
+    # ЗАливка мемов в бд
 
-    user_id = message.from_user.username
-    message_id = message.message_id
-    db_worker = SQLighter(config.database_name)
-    data_id=0
-    # запись информации о меме в бд
-    ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id,data_id)
-    db_worker.close()
-    # Создаем кнопки и записываем их в переменную
-    markup = types.InlineKeyboardMarkup(row_width=1)
-    bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
-    bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
-    markup.add(bt1, bt2)
-    bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                     reply_markup=markup)
+    if message.chat.id == -532856839:
+        chat_id = -1001210399850
+        photo_id = message.photo[-1].file_id
+        #     like
 
-    # Сохраняем фото
-    file_info = bot.get_file(message.photo[-1].file_id)
-    downloaded_file = bot.download_file(file_info.file_path)
-    src = os.getcwd() + '\\image\\' + photo_id;
-    with open(src, 'wb') as new_file:
-        new_file.write(downloaded_file)
-    # Получаем hash из фото
-    hash_images = hash_image.CalcImageHash(src)
-    # удаляем файл
-    if os.path.isfile(src):
-        os.remove(src)
-    else:
-        None
 
-    # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
-    db_worker = SQLighter(config.database_name)
-    # запись информации о меме в бд
-    rows = db_worker.select_hash_images(message.chat.id)
-    db_worker.close()
-
-    # Смотрим есть ли в нашем словаре такой хэш, проверяем на боян
-    if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
-        bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
-    else:
-        if hash_images in rows:
-            bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
-            db_worker = SQLighter(config.database_name)
-            bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
-            db_worker.close()
-
-        # проверяем на 95% совпадение хэшей
+        # Сохраняем фото
+        file_info = bot.get_file(message.photo[-1].file_id)
+        downloaded_file = bot.download_file(file_info.file_path)
+        src = os.getcwd() + '\\image\\' + photo_id;
+        with open(src, 'wb') as new_file:
+            new_file.write(downloaded_file)
+        # Получаем hash из фото
+        hash_images = hash_image.CalcImageHash(src)
+        # удаляем файл
+        if os.path.isfile(src):
+            os.remove(src)
         else:
-            for key in rows:
+            None
 
-                count = hash_image.CompareHash(key, hash_images)
-                if count < 2:
-                    bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
-                    db_worker = SQLighter(config.database_name)
-                    bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
-                    db_worker.close()
-                    break
-            # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
-            db_worker = SQLighter(config.database_name)
-            db_worker.insert_hash_image(hash_images, photo_id, message.chat.id)
-            answer = utils.get_answer_for_user(message.chat.id)
-            if answer == None:
-                answer = []
-                answer.append(photo_id)
-                utils.set_id_photo_for_chat(message.chat.id, answer)
+        # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
+        db_worker = SQLighter(config.database_name)
+        # запись информации о меме в бд
+        rows = db_worker.select_hash_images(chat_id)
+        db_worker.close()
+
+        # Смотрим есть ли в нашем словаре такой хэш, проверяем на боян
+        if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
+            bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
+        else:
+            if hash_images in rows:
+                bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
+                db_worker = SQLighter(config.database_name)
+                bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
+                db_worker.close()
+
+            # проверяем на 95% совпадение хэшей
             else:
-                # chat_id memes_guild = -1001210399850
-                if message.chat.id == -532856839:
-                    message.chat.id = -1001210399850
-                    answer = utils.get_answer_for_user(message.chat.id)
+                for key in rows:
+
+                    count = hash_image.CompareHash(key, hash_images)
+                    if count < 2:
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
+                        db_worker = SQLighter(config.database_name)
+                        bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
+                        db_worker.close()
+                        break
+                # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
+                db_worker = SQLighter(config.database_name)
+                db_worker.insert_hash_image(hash_images, photo_id, chat_id)
+
+
+    else:
+
+        # достаем id изображения
+
+        photo_id = message.photo[-1].file_id
+   #     like
+
+        user_id = message.from_user.username
+        message_id = message.message_id
+        db_worker = SQLighter(config.database_name)
+        data_id=0
+        # запись информации о меме в бд
+        ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id,data_id)
+        db_worker.close()
+        # Создаем кнопки и записываем их в переменную
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
+        bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
+        markup.add(bt1, bt2)
+        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+                         reply_markup=markup)
+
+        # Сохраняем фото
+        file_info = bot.get_file(message.photo[-1].file_id)
+        downloaded_file = bot.download_file(file_info.file_path)
+        src = os.getcwd() + '\\image\\' + photo_id;
+        with open(src, 'wb') as new_file:
+            new_file.write(downloaded_file)
+        # Получаем hash из фото
+        hash_images = hash_image.CalcImageHash(src)
+        # удаляем файл
+        if os.path.isfile(src):
+            os.remove(src)
+        else:
+            None
+
+        # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
+        db_worker = SQLighter(config.database_name)
+        # запись информации о меме в бд
+        rows = db_worker.select_hash_images(message.chat.id)
+        db_worker.close()
+
+        # Смотрим есть ли в нашем словаре такой хэш, проверяем на боян
+        if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
+            bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
+        else:
+            if hash_images in rows:
+                bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
+                db_worker = SQLighter(config.database_name)
+                bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
+                db_worker.close()
+
+            # проверяем на 95% совпадение хэшей
+            else:
+                for key in rows:
+
+                    count = hash_image.CompareHash(key, hash_images)
+                    if count < 2:
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
+                        db_worker = SQLighter(config.database_name)
+                        bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
+                        db_worker.close()
+                        break
+                # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
+                db_worker = SQLighter(config.database_name)
+                db_worker.insert_hash_image(hash_images, photo_id, message.chat.id)
+                answer = utils.get_answer_for_user(message.chat.id)
+                if answer == None:
+                    answer = []
                     answer.append(photo_id)
                     utils.set_id_photo_for_chat(message.chat.id, answer)
                 else:
-                    answer.append(photo_id)
-                    utils.set_id_photo_for_chat(message.chat.id, answer)
+                    # chat_id memes_guild = -1001210399850
+                    if message.chat.id == -532856839:
+                        message.chat.id = -1001210399850
+                        answer = utils.get_answer_for_user(message.chat.id)
+                        answer.append(photo_id)
+                        utils.set_id_photo_for_chat(message.chat.id, answer)
+                    else:
+                        answer.append(photo_id)
+                        utils.set_id_photo_for_chat(message.chat.id, answer)
 
 
 """"Меню старт"""
@@ -465,9 +522,15 @@ def start1(message):
         with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
 
-@bot.message_handler(commands=['hash_sendphoto]'])
+@bot.message_handler(commands=['hash_sendphoto'])
 def start1(message):
     rows = utils.get_hush_photo_for_chat(message.chat.id)
+    for key in rows.keys():
+        bot.send_photo(message.chat.id, photo=rows[key])
+
+@bot.message_handler(commands=['hash_sendphoto_from_memchat'])
+def start1(message):
+    rows = utils.get_hush_photo_for_chat(-1001210399850)
     for key in rows.keys():
         bot.send_photo(message.chat.id, photo=rows[key])
 
