@@ -434,20 +434,20 @@ def get_text_messges(message):
             bot.send_photo(chat_id, photo=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
 
     else:
         db_worker = SQLighter(config.database_name)
@@ -464,20 +464,20 @@ def get_text_messges(message):
             bot.send_photo(message.chat.id, photo=photo_id)
             try:
                 bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
         elif int(data_id) == 1:
             bot.send_video(message.chat.id, data=photo_id)
             try:
                 bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
 
 
 
