@@ -36,11 +36,21 @@ class SQLighter:
         with self.connection:
             self.cursor.execute(
                 'UPDATE ratio set ratio_value =ratio_value+ 1 where ratio_id=' + str(ratio_id))
+    def update_ratio_like_off(self, ratio_id ):
+        with self.connection:
+            self.cursor.execute(
+                'UPDATE ratio set ratio_value =ratio_value- 1 where ratio_id=' + str(ratio_id))
 
     def update_ratio_dislike(self, ratio_id):
         with self.connection:
             self.cursor.execute(
                 'UPDATE ratio set ratio_dislike_value =ratio_dislike_value+ 1 where ratio_id=' + str(ratio_id))
+
+
+    def update_ratio_dislike_off(self, ratio_id):
+        with self.connection:
+            self.cursor.execute(
+                'UPDATE ratio set ratio_dislike_value =ratio_dislike_value- 1 where ratio_id=' + str(ratio_id))
 
     def update_ratio_to_like(self, ratio_id, user_id):
         with self.connection:
@@ -48,12 +58,25 @@ class SQLighter:
                 'INSERT INTO ratio_like (user_id, ratio_id) VALUES (''\'' + str(user_id) + '\',\'' + str(
                     ratio_id) + '\''')')
 
+    def update_ratio_to_like_off(self, ratio_id, user_id):
+        with self.connection:
+
+            self.cursor.execute(
+                'DELETE from ratio_like WHERE user_id=''\'' + str(user_id) + '\' AND  ratio_id= ' + str(
+                    ratio_id) )
+
     def update_ratio_to_dislike(self, ratio_id, user_id):
         with self.connection:
             self.cursor.execute(
                 'INSERT INTO ratio_dislike (user_id, ratio_id) VALUES (''\'' + str(user_id) + '\',\'' + str(
                     ratio_id) + '\''')')
 
+    def update_ratio_to_dislike_off(self, ratio_id, user_id):
+        with self.connection:
+
+            self.cursor.execute(
+                'DELETE from ratio_dislike WHERE user_id=''\'' + str(user_id) + '\' AND  ratio_id= ' + str(
+                    ratio_id) )
 
 
 

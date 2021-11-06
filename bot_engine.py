@@ -146,8 +146,22 @@ def callback(c):
         like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
 
         if like == True:
-            bot.answer_callback_query(c.id, text='Вы уже голосовали')
+            db_worker.update_ratio_like_off(callback_ratio_id)
+            db_worker.update_ratio_to_like_off(callback_ratio_id, user_id)
+            ratio_value = db_worker.select_ratio_value(callback_ratio_id)
+            ratio_dislike_value = db_worker.select_ratio_dislike_value(callback_ratio_id)
             db_worker.close()
+
+            ratio_value = u'\U0001F49A' + ' ' + str(ratio_value)
+            ratio_dislike_value = u'\U0001F621' + ' ' + str(ratio_dislike_value)
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
+            bt2 = types.InlineKeyboardButton(ratio_dislike_value, callback_data='Dislike_' + str(callback_ratio_id))
+
+            markup.add(bt1, bt2)
+            bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
+            bot.answer_callback_query(c.id, text='Ваш голос убран')
+
         else:
 
             db_worker.update_ratio_like(callback_ratio_id)
@@ -177,8 +191,23 @@ def callback(c):
         like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
 
         if like == True:
-            bot.answer_callback_query(c.id, text='Вы уже голосовали')
+
+            db_worker.update_ratio_dislike_off(callback_ratio_id)
+            db_worker.update_ratio_to_dislike_off(callback_ratio_id, user_id)
+            ratio_value = db_worker.select_ratio_value(callback_ratio_id)
+            ratio_dislike_value = db_worker.select_ratio_dislike_value(callback_ratio_id)
             db_worker.close()
+
+            ratio_value = u'\U0001F49A' + ' ' + str(ratio_value)
+            ratio_dislike_value = u'\U0001F621' + ' ' + str(ratio_dislike_value)
+            markup = types.InlineKeyboardMarkup(row_width=1)
+            bt1 = types.InlineKeyboardButton(ratio_value, callback_data='Like_' + str(callback_ratio_id))
+            bt2 = types.InlineKeyboardButton(ratio_dislike_value, callback_data='Dislike_' + str(callback_ratio_id))
+
+            markup.add(bt1, bt2)
+            bot.edit_message_reply_markup(c.message.chat.id, c.message.message_id, reply_markup=markup)
+
+            bot.answer_callback_query(c.id, text='Ваш голос убран')
         else:
 
             db_worker.update_ratio_dislike(callback_ratio_id)
