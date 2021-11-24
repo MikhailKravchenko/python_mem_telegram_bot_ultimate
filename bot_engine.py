@@ -5,9 +5,9 @@
 import os
 import random
 import re
-import threading
+import flask
+import logging
 import time
-
 import utils
 import config
 import env
@@ -18,6 +18,40 @@ from SQLighter import SQLighter
 
 
 bot = telebot.TeleBot(env.token)
+WEBHOOK_HOST = '217.163.29.237'
+WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
+WEBHOOK_LISTEN = '217.163.29.237'  # In some VPS you may need to put here the IP addr
+
+WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem'  # Path to the ssl certificate
+WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem'  # Path to the ssl private key
+WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
+WEBHOOK_URL_PATH = "/%s/" % (env.token)
+
+logger = telebot.logger
+telebot.logger.setLevel(logging.INFO)
+
+app = flask.Flask(__name__)
+
+
+# Empty webserver index, return nothing, just http 200
+@app.route('/', methods=['GET', 'HEAD'])
+def index():
+    return ''
+
+
+# Process webhook calls
+@app.route(WEBHOOK_URL_PATH, methods=['POST'])
+def webhook():
+    if flask.request.headers.get('content-type') == 'application/json':
+        json_string = flask.request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return ''
+    else:
+        flask.abort(403)
+
+
+
 
 """"
 отправка мема в чат
@@ -601,8 +635,15 @@ def get_text_messages(message):
 
 
 
+time.sleep(1)
 
+# Set webhook
+bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+                certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
-if __name__ == '__main__':
-    bot.remove_webhook()
-    bot.polling(none_stop=True)
+# Start flask server
+app.run(host=WEBHOOK_LISTEN,
+        port=WEBHOOK_PORT,
+        ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
+        debug=True)
+
