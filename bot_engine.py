@@ -576,6 +576,15 @@ def start1(message):
 
         bot.send_message(message.chat.id, text)
 
+
+@bot.message_handler(commands=['tophunya'])
+def get_text_messges(message):
+    if message.chat.id == -532856839:
+        chat_id = -532856839
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_3_7days()
+        db_worker.close()
+        bot.send_message(chat_id, str(top))
 # @bot.message_handler(commands=['hash_download'])
 # def start1(message):
 #     rows = utils.get_hush_photo_for_chat(message.chat.id)

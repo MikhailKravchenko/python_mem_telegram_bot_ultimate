@@ -147,6 +147,17 @@ class SQLighter:
 
         return ratio_value
 
+    def ratio_rating_3_7days(self):
+
+        with self.connection:
+            ratio_value = self.cursor.execute(
+                'SELECT * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+        for value in ratio_value:
+            ratio_value = value
+        return ratio_value
+
+        return ratio_value
+
     def ratio_rating_30days(self):
 
         with self.connection:
