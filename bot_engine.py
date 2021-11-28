@@ -682,7 +682,7 @@ if env.webhook == True:
     app.run(host=WEBHOOK_LISTEN,
             port=WEBHOOK_PORT,
             ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
-            debug=True)
+            debug=False)
 else:
 
     if __name__ == '__main__':
