@@ -15,6 +15,7 @@ import telebot
 from telebot import types
 import hash_image
 from SQLighter import SQLighter
+from gevent.pywsgi import WSGIServer
 
 
 bot = telebot.TeleBot(env.token)
@@ -673,16 +674,18 @@ def get_text_messages(message):
 if env.webhook == True:
 
     time.sleep(1)
-
     # Set webhook
     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
     # Start flask server
-    app.run(host=WEBHOOK_LISTEN,
-            port=WEBHOOK_PORT,
-            ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
-            debug=False)
+    # app.run(host=WEBHOOK_LISTEN,
+    #         port=WEBHOOK_PORT,
+    #         ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
+    #         debug=False)
+    http_server = WSGIServer((WEBHOOK_HOST, WEBHOOK_PORT), app, keyfile=WEBHOOK_SSL_PRIV, certfile=WEBHOOK_SSL_CERT)
+    http_server.serve_forever()
+
 else:
 
     if __name__ == '__main__':
