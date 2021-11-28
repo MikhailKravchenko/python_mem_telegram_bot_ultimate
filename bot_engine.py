@@ -674,8 +674,7 @@ def get_text_messages(message):
 if env.webhook == True:
 
     time.sleep(1)
-    app.config['ENV']='development'
-    print(app.config)
+    # app.config['ENV']='development'
     # Set webhook
     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
