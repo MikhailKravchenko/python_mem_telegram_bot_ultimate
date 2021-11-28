@@ -674,18 +674,17 @@ def get_text_messages(message):
 if env.webhook == True:
 
     time.sleep(1)
+    app.config['ENV']='development'
+    print(app.config)
     # Set webhook
     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
     # Start flask server
-    # app.run(host=WEBHOOK_LISTEN,
-    #         port=WEBHOOK_PORT,
-    #         ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
-    #         debug=False)
-    http_server = WSGIServer(('', WEBHOOK_PORT), app, keyfile=WEBHOOK_SSL_PRIV, certfile=WEBHOOK_SSL_CERT)
-    http_server.serve_forever()
-
+    app.run(host=WEBHOOK_LISTEN,
+            port=WEBHOOK_PORT,
+            ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
+            debug=False)
 else:
 
     if __name__ == '__main__':
