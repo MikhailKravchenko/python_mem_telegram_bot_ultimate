@@ -683,7 +683,7 @@ if env.webhook == True:
     #         port=WEBHOOK_PORT,
     #         ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
     #         debug=False)
-    http_server = WSGIServer((WEBHOOK_HOST, WEBHOOK_PORT), app, keyfile=WEBHOOK_SSL_PRIV, certfile=WEBHOOK_SSL_CERT)
+    http_server = WSGIServer(('', WEBHOOK_PORT), app, keyfile=WEBHOOK_SSL_PRIV, certfile=WEBHOOK_SSL_CERT)
     http_server.serve_forever()
 
 else:
