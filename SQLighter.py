@@ -13,15 +13,15 @@ class SQLighter:
         self.connection = sqlite3.connect(database)
         self.cursor = self.connection.cursor()
 
-    def creator_photo_ratio(self, message, photo_id, user_id, message_id, data_id):
+    def creator_photo_ratio(self, message, photo_id, user_id, message_id, data_id, chat_id):
 
         with self.connection:
 
             self.cursor.execute(
-                'INSERT INTO ratio (photo_id, user_id, create_time, message_id, data_id) VALUES (''\'' + str(photo_id) + '\',\'' + str(
+                'INSERT INTO ratio (photo_id, user_id, create_time, message_id, data_id, chat_id) VALUES (''\'' + str(photo_id) + '\',\'' + str(
                     user_id) + '\',\'' +
                 str(
-                    datetime.utcfromtimestamp(message.date).strftime('%Y-%m-%d %H:%M:%S')) + '\',\'' + str(message_id) + '\',\'' + str(data_id) + '\''')')
+                    datetime.utcfromtimestamp(message.date).strftime('%Y-%m-%d %H:%M:%S')) + '\',\'' + str(message_id) + '\',\'' + str(data_id) + '\',\'' + str(chat_id) + '\''')')
 
         ratio_id = self.cursor.execute('SELECT last_insert_rowid()').fetchall()
 
@@ -132,14 +132,14 @@ class SQLighter:
         else:
             return True
 
-    def ratio_rating_7days(self):
+    def ratio_rating_7days(self, chat_id):
 
 
         with self.connection:
 
 
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\'))) ').fetchall()
+                'SELECT  * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE  chat_id = '+ str(chat_id) +' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\'))) ').fetchall()
         for value in ratio_value:
 
              ratio_value=value
@@ -147,20 +147,29 @@ class SQLighter:
 
         return ratio_value
 
-    def ratio_rating_3_7days(self):
+    def ratio_rating_3_7days(self, chat_id):
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-7 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-7 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+
+        return ratio_value
+
+    def ratio_rating_3_30days(self, chat_id):
+
+        with self.connection:
+            ratio_value = self.cursor.execute(
+                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
 
         return ratio_value
 
 
-    def ratio_rating_30days(self):
+
+    def ratio_rating_30days(self, chat_id):
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE create_time > (SELECT DATETIME(\'now\', \'-30 day\'))) ').fetchall()
+                'SELECT  * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))) ').fetchall()
 
         for value in ratio_value:
             ratio_value = value
