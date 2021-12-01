@@ -343,9 +343,12 @@ def handle_docs_audio(message):
         bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
         bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
         markup.add(bt1, bt2)
-        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                         reply_markup=markup)
+        try:
 
+            bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+                         reply_markup=markup)
+        except TypeError:
+            bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
@@ -573,9 +576,11 @@ def get_text_messages(message):
     bt1 = types.InlineKeyboardButton(u'\U0001F49A' + ' 0', callback_data='Like_' + str(ratio_id))
     bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
     markup.add(bt1, bt2)
-    bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+    try:
+        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                      reply_markup=markup)
-
+    except TypeError:
+        bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
 
 @bot.message_handler(commands=['tophunya7'])
 def get_text_messges(message):
