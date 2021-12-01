@@ -421,7 +421,9 @@ def start(message):
 
 @bot.message_handler(commands=['top7'])
 def get_text_messges(message):
-    if message.chat.id == -532856839:
+    if message.chat.id == -1001210399850:
+        return
+    elif message.chat.id == -532856839:
         chat_id = -1001210399850
         db_worker = SQLighter(config.database_name)
         top = db_worker.ratio_rating_7days(chat_id)
@@ -490,7 +492,9 @@ def get_text_messges(message):
 
 @bot.message_handler(commands=['top30'])
 def get_text_messges(message):
-    if message.chat.id == -532856839:
+    if message.chat.id == -1001210399850:
+        return
+    elif message.chat.id == -532856839:
         chat_id = -1001210399850
         db_worker = SQLighter(config.database_name)
         top = db_worker.ratio_rating_30days(chat_id)
