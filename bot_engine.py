@@ -176,6 +176,9 @@ def callback(c):
         callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
 
         user_id = c.from_user.username
+        if user_id is None:
+            bot.answer_callback_query(c.id, text='Вам необходимо заполнить username, что бы голосовать')
+            return
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
@@ -221,6 +224,9 @@ def callback(c):
         callback_ratio_id = (int(''.join(filter(str.isdigit, data))))
 
         user_id = c.from_user.username
+        if user_id is None:
+            bot.answer_callback_query(c.id, text='Вам необходимо заполнить username, что бы голосовать')
+            return
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
