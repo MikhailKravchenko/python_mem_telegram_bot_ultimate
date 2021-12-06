@@ -354,7 +354,7 @@ def handle_docs_audio(message):
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                          reply_markup=markup)
         except TypeError:
-            bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
+            bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
