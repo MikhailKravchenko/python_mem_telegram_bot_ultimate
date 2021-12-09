@@ -2,6 +2,7 @@
 '''Github Action rules'''
 
 # @pirog - telegram
+import json
 import os
 import random
 import re
@@ -742,7 +743,10 @@ def start1(message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
-    d = {'message_': message}
+    m = str(message).replace("'", '"')
+    n = json.dumps(m)
+    o = json.loads(n)
+    d={"message_" : o}
     logging.info('User Message', extra=d)
 
     if message.text == "Как тебе мем?":
