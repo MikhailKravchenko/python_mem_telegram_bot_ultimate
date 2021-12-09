@@ -773,7 +773,7 @@ def get_text_messages(message):
         None
 
 
-if config.webhook is True:
+if env.webhook is True:
     # Set webhook
     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
