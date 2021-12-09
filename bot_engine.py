@@ -743,7 +743,7 @@ def start1(message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
 
-    m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null', '"null"')
+    m = str(message).replace("'", '"').replace('False', 0).replace('True', 1).replace('null', 0)
     n = json.dumps(m)
     o = json.loads(n)
     d={"message_" : o}
