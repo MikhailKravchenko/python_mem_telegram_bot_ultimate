@@ -5,6 +5,8 @@
 import os
 import random
 import re
+from datetime import datetime
+import logging.config
 import flask
 import logging
 import time
@@ -16,6 +18,7 @@ from telebot import types
 import hash_image
 from SQLighter import SQLighter
 from gevent.pywsgi import WSGIServer
+from pythonjsonlogger import jsonlogger
 
 
 bot = telebot.TeleBot(env.token)
@@ -27,9 +30,21 @@ WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem'  # Path to the ssl certif
 WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem'  # Path to the ssl private key
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (env.token)
+#
+# logger = telebot.logger
+# telebot.logger.setLevel(logging.INFO)
 
-logger = telebot.logger
-telebot.logger.setLevel(logging.INFO)
+
+logger = logging.getLogger(__name__)
+logHandler = logging.StreamHandler()
+formatter = jsonlogger.JsonFormatter()
+logHandler.setFormatter(formatter)
+logger.addHandler(logHandler)
+answerlog = logging.config.fileConfig('logging-json.ini', disable_existing_loggers=False)
+
+
+
+
 
 app = flask.Flask(__name__)
 
@@ -726,8 +741,10 @@ def start1(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    # Отсылаем в чат
-    # AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E
+
+    d = {'message_': message}
+    logging.info('User Message', extra=d)
+
     if message.text == "Как тебе мем?":
         photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
 
