@@ -6,9 +6,12 @@ import json
 import os
 import random
 import re
+import ssl
+
 from datetime import datetime
 import logging.config
 import flask
+from aiohttp import web
 import logging
 import time
 import utils
@@ -44,30 +47,44 @@ logger.addHandler(logHandler)
 answerlog = logging.config.fileConfig('logging-json.ini', disable_existing_loggers=False)
 
 
-
-
-
-app = flask.Flask(__name__)
-
-
-# Empty webserver index, return nothing, just http 200
-@app.route('/', methods=['GET', 'HEAD'])
-def index():
-    return ''
-
-
+app = web.Application()
 # Process webhook calls
-@app.route(WEBHOOK_URL_PATH, methods=['POST'])
-def webhook():
-    if flask.request.headers.get('content-type') == 'application/json':
-        json_string = flask.request.get_data().decode('utf-8')
-        update = telebot.types.Update.de_json(json_string)
+async def handle(request):
+    if request.match_info.get('token') == bot.token:
+        request_body_dict = await request.json()
+        update = telebot.types.Update.de_json(request_body_dict)
         bot.process_new_updates([update])
-        return ''
+        return web.Response()
     else:
-        flask.abort(403)
+        return web.Response(status=403)
 
 
+app.router.add_post('/{token}/', handle)
+
+
+# для вебхуков flask
+
+# app = flask.Flask(__name__)
+#
+#
+# # Empty webserver index, return nothing, just http 200
+# @app.route('/', methods=['GET', 'HEAD'])
+# def index():
+#     return ''
+#
+#
+# # Process webhook calls
+# @app.route(WEBHOOK_URL_PATH, methods=['POST'])
+# def webhook():
+#     if flask.request.headers.get('content-type') == 'application/json':
+#         json_string = flask.request.get_data().decode('utf-8')
+#         update = telebot.types.Update.de_json(json_string)
+#         bot.process_new_updates([update])
+#         return ''
+#     else:
+#         flask.abort(403)
+#
+#
 
 
 """"
@@ -511,7 +528,6 @@ def get_text_messges(message):
                              f'Нет ни одного мема в базе')
 
 
-
 @bot.message_handler(commands=['top30'])
 def get_text_messges(message):
     if message.chat.id == -1001210399850:
@@ -757,22 +773,46 @@ def get_text_messages(message):
         None
 
 
-if env.webhook == True:
-
-    time.sleep(1)
-    # app.config['ENV']='development'
+if config.webhook is True:
     # Set webhook
     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
 
-    # Start flask server
-    app.run(host=WEBHOOK_LISTEN,
-            port=WEBHOOK_PORT,
-            ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
-            debug=False)
-else:
+    # Build ssl context
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
+    # Start aiohttp server
+    web.run_app(
+        app,
+        host=WEBHOOK_LISTEN,
+        port=WEBHOOK_PORT,
+        ssl_context=context,
+    )
+else:
     if __name__ == '__main__':
         bot.remove_webhook()
 
         bot.polling(none_stop=True)
+
+
+# для вебхуков flask
+# if env.webhook == True:
+#
+#     time.sleep(1)
+#     # app.config['ENV']='development'
+#     # Set webhook
+#     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+#                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
+#
+#     # Start flask server
+#     app.run(host=WEBHOOK_LISTEN,
+#             port=WEBHOOK_PORT,
+#             ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
+#             debug=False)
+# else:
+#
+#     if __name__ == '__main__':
+#         bot.remove_webhook()
+#
+#         bot.polling(none_stop=True)
