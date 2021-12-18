@@ -24,14 +24,13 @@ from SQLighter import SQLighter
 from gevent.pywsgi import WSGIServer
 from pythonjsonlogger import jsonlogger
 
-
 bot = telebot.TeleBot(env.token)
 WEBHOOK_HOST = '217.163.29.237'
-WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
-WEBHOOK_LISTEN = '217.163.29.237'  # In some VPS you may need to put here the IP addr
+WEBHOOK_PORT = 8443 # 443, 80, 88 or 8443 (port need to be 'open')
+WEBHOOK_LISTEN = '217.163.29.237' # In some VPS you may need to put here the IP addr
 
-WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem'  # Path to the ssl certificate
-WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem'  # Path to the ssl private key
+WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem' # Path to the ssl certificate
+WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem' # Path to the ssl private key
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (env.token)
 #
@@ -46,8 +45,9 @@ logHandler.setFormatter(formatter)
 logger.addHandler(logHandler)
 answerlog = logging.config.fileConfig('logging-json.ini', disable_existing_loggers=False)
 
-
 app = web.Application()
+
+
 # Process webhook calls
 async def handle(request):
     if request.match_info.get('token') == bot.token:
@@ -60,7 +60,6 @@ async def handle(request):
 
 
 app.router.add_post('/{token}/', handle)
-
 
 # для вебхуков flask
 
@@ -315,7 +314,6 @@ def handle_docs_audio(message):
         photo_id = message.photo[-1].file_id
         #     like
 
-
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
@@ -352,7 +350,7 @@ def handle_docs_audio(message):
 
                     count = hash_image.CompareHash(key, hash_images)
                     if count < 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
                         db_worker = SQLighter(config.database_name)
                         bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
                         db_worker.close()
@@ -367,13 +365,13 @@ def handle_docs_audio(message):
         # достаем id изображения
 
         photo_id = message.photo[-1].file_id
-   #     like
+        #     like
 
         user_id = message.from_user.username
         message_id = message.message_id
-        chat_id=message.chat.id
+        chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
-        data_id=0
+        data_id = 0
         # запись информации о меме в бд
         ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id, data_id, chat_id)
         db_worker.close()
@@ -385,7 +383,7 @@ def handle_docs_audio(message):
         try:
 
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                         reply_markup=markup)
+                             reply_markup=markup)
         except TypeError:
             bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
         # Сохраняем фото
@@ -424,7 +422,7 @@ def handle_docs_audio(message):
 
                     count = hash_image.CompareHash(key, hash_images)
                     if count < 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но  совпадение более 98%")
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
                         db_worker = SQLighter(config.database_name)
                         bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
                         db_worker.close()
@@ -457,7 +455,6 @@ def start(message):
     bot.send_message(message.chat.id, f"Для Гильдии Python")
 
 
-
 @bot.message_handler(commands=['top7'])
 def get_text_messges(message):
     if message.chat.id == -1001210399850:
@@ -467,7 +464,6 @@ def get_text_messges(message):
         db_worker = SQLighter(config.database_name)
         top = db_worker.ratio_rating_7days(chat_id)
         db_worker.close()
-
 
         ratio = top[1]
         photo_id = top[2]
@@ -479,23 +475,23 @@ def get_text_messges(message):
             bot.send_photo(chat_id, photo=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
 
     else:
-        chat_id=message.chat.id
+        chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
         top = db_worker.ratio_rating_7days(chat_id)
         db_worker.close()
@@ -509,20 +505,20 @@ def get_text_messges(message):
                 bot.send_photo(message.chat.id, photo=photo_id)
                 try:
                     bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
-                                 reply_to_message_id=message_id)
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                     reply_to_message_id=message_id)
                 except:
                     bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
             elif int(data_id) == 1:
-                bot.send_video(message.chat.id, data = photo_id)
+                bot.send_video(message.chat.id, data=photo_id)
                 try:
                     bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
-                                 reply_to_message_id=message_id)
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                     reply_to_message_id=message_id)
                 except:
                     bot.send_message(message.chat.id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
@@ -567,7 +563,7 @@ def get_text_messges(message):
                              f'Нет ни одного мема в базе')
 
     else:
-        chat_id= message.chat.id
+        chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
         top = db_worker.ratio_rating_30days(chat_id)
         db_worker.close()
@@ -620,18 +616,19 @@ def get_text_messages(message):
     markup.add(bt1, bt2)
     try:
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                     reply_markup=markup)
+                         reply_markup=markup)
     except TypeError:
         bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
 
+
 @bot.message_handler(commands=['tophunya7'])
 def get_text_messges(message):
-    chat_id=message.chat.id
-    mem_chat= -1001210399850
+    chat_id = message.chat.id
+    mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
     top = db_worker.ratio_rating_3_7days(mem_chat)
     db_worker.close()
-    i=0
+    i = 0
 
     for el in top:
 
@@ -640,35 +637,40 @@ def get_text_messges(message):
         username = top[i][3]
         message_id = top[i][5]
         data_id = top[i][7]
-        i=i+1
+        i = i + 1
         if int(data_id) == 0:
             bot.send_photo(chat_id, photo=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username} '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username} ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех  на этой неделе',
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех  на этой неделе')
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+
 
 @bot.message_handler(commands=['tophunya30'])
 def get_text_messges(message):
-    chat_id=message.chat.id
-    mem_chat= -1001210399850
+    chat_id = message.chat.id
+    mem_chat = -1001210399850
 
     db_worker = SQLighter(config.database_name)
     top = db_worker.ratio_rating_3_7days(mem_chat)
     db_worker.close()
-    i=0
+    i = 0
 
     for el in top:
 
@@ -677,25 +679,205 @@ def get_text_messges(message):
         username = top[i][3]
         message_id = top[i][5]
         data_id = top[i][7]
-        i=i+1
+        i = i + 1
         if int(data_id) == 0:
             bot.send_photo(chat_id, photo=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username} '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
+                                 f' @{username} ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
                                  reply_to_message_id=message_id)
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  '+ str(i) +f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+
+
+@bot.message_handler(commands=['tophunya'])
+def get_text_messges(message):
+    chat_id = message.chat.id
+    mem_chat = -1001210399850
+    db_worker = SQLighter(config.database_name)
+    top = db_worker.ratio_rating_3_7days(mem_chat)
+    db_worker.close()
+    i = 0
+
+    for el in top:
+
+        ratio = top[i][1]
+        photo_id = top[i][2]
+        username = top[i][3]
+        message_id = top[i][5]
+        data_id = top[i][7]
+        i = i + 1
+        if int(data_id) == 0:
+            bot.send_photo(chat_id, photo=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username} ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+        elif int(data_id) == 1:
+            bot.send_video(chat_id, data=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+
+@bot.message_handler(commands=['top'])
+def get_text_messges(message):
+    if message.chat.id == -1001210399850:
+        return
+    elif message.chat.id == -532856839:
+        chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_all_time_for_top(chat_id)
+        db_worker.close()
+
+        ratio = top[1]
+        photo_id = top[2]
+        username = top[3]
+        message_id = top[5]
+        data_id = top[7]
+
+        if int(data_id) == 0:
+            bot.send_photo(chat_id, photo=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время')
+        elif int(data_id) == 1:
+            bot.send_video(chat_id, data=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время')
+
+    else:
+        chat_id = message.chat.id
+        db_worker = SQLighter(config.database_name)
+        top = db_worker.ratio_rating_7days(chat_id)
+        db_worker.close()
+        try:
+            ratio = top[1]
+            photo_id = top[2]
+            username = top[3]
+            message_id = top[5]
+            data_id = top[7]
+            if int(data_id) == 0:
+                bot.send_photo(message.chat.id, photo=photo_id)
+                try:
+                    bot.send_message(message.chat.id,
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                     reply_to_message_id=message_id)
+                except:
+                    bot.send_message(message.chat.id,
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+            elif int(data_id) == 1:
+                bot.send_video(message.chat.id, data=photo_id)
+                try:
+                    bot.send_message(message.chat.id,
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                     reply_to_message_id=message_id)
+                except:
+                    bot.send_message(message.chat.id,
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+        except IndexError:
+            bot.send_message(message.chat.id,
+                             f'Нет ни одного мема в базе')
+
+@bot.message_handler(commands=['antitophunya'])
+def get_text_messges(message):
+    chat_id = message.chat.id
+    mem_chat = chat_id
+    db_worker = SQLighter(config.database_name)
+    top = db_worker.ratio_rating_3_7days(mem_chat)
+    db_worker.close()
+    i = 0
+    for el in top:
+
+        ratio = top[i][6]
+        photo_id = top[i][2]
+        username = top[i][3]
+        message_id = top[i][5]
+        data_id = top[i][7]
+        i = i + 1
+        if int(data_id) == 0:
+            bot.send_photo(chat_id, photo=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username} ' + str(
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+        elif int(data_id) == 1:
+            bot.send_video(chat_id, data=photo_id)
+            try:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
+                                 reply_to_message_id=message_id)
+            except:
+                bot.send_message(chat_id,
+                                 f' @{username}  ' + str(
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+
+
+@bot.message_handler(commands=['helper'])
+def help(message):
+    text = f'/mem Отправить мем  \n' \
+           f' \n' \
+           f'/happy1 Пришла зартплата мульт  \n' \
+           f' \n' \
+           f'/happy2 Пришла зарплата мышь \n' \
+           f'  \n' \
+           f'/gud  это шедевр \n' \
+           f'  \n' \
+           f'/top топ за все время в чат(не проверял как работает) \n' \
+           f'  \n' \
+           f'/top7 топ 7 в чат \n' \
+           f' \n' \
+           f'/top30 топ 30 в чат\n' \
+           f' \n' \
+           f'/tophunya посмотреть топ за все время \n' \
+           f' \n' \
+           f'/tophunya7 посмотреть топ 7\n' \
+           f' \n' \
+           f'/tophunya30 посмотреть топ 30\n' \
+           f'' \
+           f'\n' \
+           f'/antitophunya посмотреть топы дизлайков\n' \
+           f'\n'
+    bot.send_message(message.chat.id, text)
 
 
 @bot.message_handler(commands=['message'])
@@ -709,6 +891,7 @@ def start1(message):
         text = message.text[9:]
 
         bot.send_message(message.chat.id, text)
+
 
 # @bot.message_handler(commands=['hash_download'])
 # def start1(message):
@@ -758,11 +941,12 @@ def start1(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-
-    m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null', '"null"').replace('None', '"None"')
+    m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null',
+                                                                                                     '"null"').replace(
+        'None', '"None"')
     n = json.dumps(m)
     o = json.loads(n)
-    d={"message_" : o}
+    d = {"message_": o}
     logging.info('User Message', extra=d)
 
     if message.text == "Как тебе мем?":
@@ -794,7 +978,6 @@ else:
         bot.remove_webhook()
 
         bot.polling(none_stop=True)
-
 
 # для вебхуков flask
 # if env.webhook == True:

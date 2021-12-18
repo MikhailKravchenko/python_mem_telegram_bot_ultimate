@@ -4,9 +4,6 @@ import sys
 from datetime import datetime
 
 
-
-
-
 class SQLighter:
 
     def __init__(self, database):
@@ -18,10 +15,12 @@ class SQLighter:
         with self.connection:
 
             self.cursor.execute(
-                'INSERT INTO ratio (photo_id, user_id, create_time, message_id, data_id, chat_id) VALUES (''\'' + str(photo_id) + '\',\'' + str(
+                'INSERT INTO ratio (photo_id, user_id, create_time, message_id, data_id, chat_id) VALUES (''\'' + str(
+                    photo_id) + '\',\'' + str(
                     user_id) + '\',\'' +
                 str(
-                    datetime.utcfromtimestamp(message.date).strftime('%Y-%m-%d %H:%M:%S')) + '\',\'' + str(message_id) + '\',\'' + str(data_id) + '\',\'' + str(chat_id) + '\''')')
+                    datetime.utcfromtimestamp(message.date).strftime('%Y-%m-%d %H:%M:%S')) + '\',\'' + str(
+                    message_id) + '\',\'' + str(data_id) + '\',\'' + str(chat_id) + '\''')')
 
         ratio_id = self.cursor.execute('SELECT last_insert_rowid()').fetchall()
 
@@ -32,11 +31,12 @@ class SQLighter:
 
         return ratio_id
 
-    def update_ratio_like(self, ratio_id ):
+    def update_ratio_like(self, ratio_id):
         with self.connection:
             self.cursor.execute(
                 'UPDATE ratio set ratio_value =ratio_value+ 1 where ratio_id=' + str(ratio_id))
-    def update_ratio_like_off(self, ratio_id ):
+
+    def update_ratio_like_off(self, ratio_id):
         with self.connection:
             self.cursor.execute(
                 'UPDATE ratio set ratio_value =ratio_value- 1 where ratio_id=' + str(ratio_id))
@@ -45,7 +45,6 @@ class SQLighter:
         with self.connection:
             self.cursor.execute(
                 'UPDATE ratio set ratio_dislike_value =ratio_dislike_value+ 1 where ratio_id=' + str(ratio_id))
-
 
     def update_ratio_dislike_off(self, ratio_id):
         with self.connection:
@@ -60,10 +59,9 @@ class SQLighter:
 
     def update_ratio_to_like_off(self, ratio_id, user_id):
         with self.connection:
-
             self.cursor.execute(
                 'DELETE from ratio_like WHERE user_id=''\'' + str(user_id) + '\' AND  ratio_id= ' + str(
-                    ratio_id) )
+                    ratio_id))
 
     def update_ratio_to_dislike(self, ratio_id, user_id):
         with self.connection:
@@ -73,12 +71,9 @@ class SQLighter:
 
     def update_ratio_to_dislike_off(self, ratio_id, user_id):
         with self.connection:
-
             self.cursor.execute(
                 'DELETE from ratio_dislike WHERE user_id=''\'' + str(user_id) + '\' AND  ratio_id= ' + str(
-                    ratio_id) )
-
-
+                    ratio_id))
 
     def select_ratio_value(self, ratio_id):
         with self.connection:
@@ -108,11 +103,11 @@ class SQLighter:
 
     def select_ratio_to_like_to_user(self, ratio_id, user_id):
 
-
         with self.connection:
 
             ratio_value = self.cursor.execute(
-                'SELECT ratio_like_id from ratio_like where ratio_id=' + str(ratio_id) + ' and user_id=' '\'' +str(user_id)+'\'').fetchall()
+                'SELECT ratio_like_id from ratio_like where ratio_id=' + str(ratio_id) + ' and user_id=' '\'' + str(
+                    user_id) + '\'').fetchall()
         if ratio_value == []:
 
             return False
@@ -121,11 +116,11 @@ class SQLighter:
 
     def select_ratio_to_dislike_to_user(self, ratio_id, user_id):
 
-
         with self.connection:
 
             ratio_value = self.cursor.execute(
-                'SELECT ratio_dislike_id from ratio_dislike where ratio_id=' + str(ratio_id) + ' and user_id=' '\'' +str(user_id)+'\'').fetchall()
+                'SELECT ratio_dislike_id from ratio_dislike where ratio_id=' + str(
+                    ratio_id) + ' and user_id=' '\'' + str(user_id) + '\'').fetchall()
         if ratio_value == []:
 
             return False
@@ -134,15 +129,13 @@ class SQLighter:
 
     def ratio_rating_7days(self, chat_id):
 
-
         with self.connection:
-
-
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE  chat_id = '+ str(chat_id) +' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\'))) ').fetchall()
+                'SELECT  * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + ' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE  chat_id = ' + str(
+                    chat_id) + ' AND create_time > (SELECT DATETIME(\'now\', \'-7 day\'))) ').fetchall()
         for value in ratio_value:
-
-             ratio_value=value
+            ratio_value = value
         return ratio_value
 
         return ratio_value
@@ -151,7 +144,33 @@ class SQLighter:
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-7 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+                'SELECT * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + ' AND  create_time > (SELECT DATETIME(\'now\', \'-7 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+
+        return ratio_value
+
+    def ratio_rating_all_time(self, chat_id):
+
+        with self.connection:
+            ratio_value = self.cursor.execute(
+                'SELECT * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + '  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+
+        return ratio_value
+
+    def anti_ratio_rating_all_time (self, chat_id):
+
+        with self.connection:
+            ratio_value = self.cursor.execute(
+                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +'  ORDER BY ratio_dislike_value DESC LIMIT 3').fetchall()
+
+        return ratio_value
+    def ratio_rating_all_time_for_top(self, chat_id):
+
+        with self.connection:
+            ratio_value = self.cursor.execute(
+                'SELECT * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + '  ORDER BY ratio_value DESC LIMIT 1').fetchall()
 
         return ratio_value
 
@@ -159,26 +178,24 @@ class SQLighter:
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
+                'SELECT * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + ' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))  ORDER BY ratio_value DESC LIMIT 3').fetchall()
 
         return ratio_value
-
-
 
     def ratio_rating_30days(self, chat_id):
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT  * FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE chat_id = '+ str(chat_id) +' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))) ').fetchall()
+                'SELECT  * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + ' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\')) AND ratio_value=(SELECT MAX(ratio_value) FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + ' AND  create_time > (SELECT DATETIME(\'now\', \'-30 day\'))) ').fetchall()
 
         for value in ratio_value:
             ratio_value = value
         return ratio_value
 
         return ratio_value
-
-
-
 
     def select_hash_images(self, chat_id):
         with self.connection:
@@ -192,11 +209,10 @@ class SQLighter:
                 rows.append(y)
         return rows
 
-
     def select_file_id(self, hash_images):
 
         fetchall_file_id = self.cursor.execute(
-                'SELECT file_id from hash_image where hash_images=' + '\'' + str(hash_images)+'\'').fetchall()
+            'SELECT file_id from hash_image where hash_images=' + '\'' + str(hash_images) + '\'').fetchall()
         for value in fetchall_file_id:
             for _value in value:
                 file_id = _value
@@ -209,10 +225,11 @@ class SQLighter:
         with self.connection:
 
             self.cursor.execute(
-                'INSERT INTO hash_image (hash_images, file_id, chat_id) VALUES (''\'' + str(hash_images) + '\',\'' + str(
+                'INSERT INTO hash_image (hash_images, file_id, chat_id) VALUES (''\'' + str(
+                    hash_images) + '\',\'' + str(
                     file_id) + '\',\'' +
                 str(
-                    chat_id) +  '\''')')
+                    chat_id) + '\''')')
 
         ratio_id = self.cursor.execute('SELECT last_insert_rowid()').fetchall()
 
