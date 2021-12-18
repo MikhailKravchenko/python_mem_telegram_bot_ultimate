@@ -820,8 +820,7 @@ def get_text_messges(message):
     top = db_worker.anti_ratio_rating_all_time(mem_chat)
     db_worker.close()
     i = 0
-    test_top= (" ".join(map(str,top)))
-    bot.send_message(chat_id, test_top)
+
     for el in top:
 
         ratio = top[i][6]
