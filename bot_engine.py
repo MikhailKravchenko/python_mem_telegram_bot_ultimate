@@ -815,7 +815,7 @@ def get_text_messges(message):
 @bot.message_handler(commands=['antitophunya'])
 def get_text_messges(message):
     chat_id = message.chat.id
-    mem_chat = chat_id
+    mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
     top = db_worker.ratio_rating_3_7days(mem_chat)
     db_worker.close()
