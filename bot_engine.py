@@ -709,7 +709,7 @@ def get_text_messges(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
-    top = db_worker.ratio_rating_3_7days(mem_chat)
+    top = db_worker.ratio_rating_all_time(mem_chat)
     db_worker.close()
     i = 0
 
@@ -817,7 +817,7 @@ def get_text_messges(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
-    top = db_worker.ratio_rating_3_7days(mem_chat)
+    top = db_worker.anti_ratio_rating_all_time(mem_chat)
     db_worker.close()
     i = 0
     for el in top:
