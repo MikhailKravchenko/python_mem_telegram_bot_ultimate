@@ -368,6 +368,10 @@ def handle_docs_audio(message):
         #     like
 
         user_id = message.from_user.username
+        if user_id is None:
+            user = message.from_user.id
+            user_name = message.from_user.first_name
+            user_id = "[" + user_name + "](tg://user?id=" + str(user) + ")"
         message_id = message.message_id
         chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
@@ -383,7 +387,7 @@ def handle_docs_audio(message):
         try:
 
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                             reply_markup=markup)
+                             reply_markup=markup, parse_mode="Markdown")
         except TypeError:
             bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
         # Сохраняем фото
@@ -476,19 +480,19 @@ def get_text_messges(message):
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
 
     else:
         chat_id = message.chat.id
@@ -506,19 +510,19 @@ def get_text_messges(message):
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
             elif int(data_id) == 1:
                 bot.send_video(message.chat.id, data=photo_id)
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
@@ -545,19 +549,19 @@ def get_text_messges(message):
                 try:
                     bot.send_message(chat_id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(chat_id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!', parse_mode="Markdown")
             elif int(data_id) == 1:
                 bot.send_video(chat_id, data=photo_id)
                 try:
                     bot.send_message(chat_id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(chat_id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!', parse_mode="Markdown")
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
@@ -580,19 +584,19 @@ def get_text_messges(message):
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!', parse_mode="Markdown")
             elif int(data_id) == 1:
                 bot.send_video(message.chat.id, data=photo_id)
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - он лучший в этом месяце! Поздравляю!', parse_mode="Markdown")
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
@@ -603,6 +607,10 @@ def get_text_messages(message):
     video_id = message.video.file_id
     chat_id = message.chat.id
     user_id = message.from_user.username
+    if user_id is None:
+        user = message.from_user.id
+        user_name = message.from_user.first_name
+        user_id = "[" + user_name + "](tg://user?id=" + str(user) + ")"
     message_id = message.message_id
     data_id = 1
     db_worker = SQLighter(config.database_name)
@@ -616,7 +624,7 @@ def get_text_messages(message):
     markup.add(bt1, bt2)
     try:
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                         reply_markup=markup)
+                         reply_markup=markup, parse_mode="Markdown")
     except TypeError:
         bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
 
@@ -644,22 +652,22 @@ def get_text_messges(message):
                 bot.send_message(chat_id,
                                  f' @{username} ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
 
 
 @bot.message_handler(commands=['tophunya30'])
@@ -686,22 +694,22 @@ def get_text_messges(message):
                 bot.send_message(chat_id,
                                  f' @{username} ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце', parse_mode="Markdown")
 
 
 @bot.message_handler(commands=['tophunya'])
@@ -727,22 +735,22 @@ def get_text_messges(message):
                 bot.send_message(chat_id,
                                  f' @{username} ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
 
 @bot.message_handler(commands=['top'])
 def get_text_messges(message):
@@ -765,19 +773,19 @@ def get_text_messges(message):
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
-                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время')
+                                 f' @{username}  Твой мем набрал {ratio} лайков - больше всех за все время', parse_mode="Markdown")
 
     else:
         chat_id = message.chat.id
@@ -795,19 +803,19 @@ def get_text_messges(message):
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
             elif int(data_id) == 1:
                 bot.send_video(message.chat.id, data=photo_id)
                 try:
                     bot.send_message(message.chat.id,
                                      f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                     reply_to_message_id=message_id)
+                                     reply_to_message_id=message_id, parse_mode="Markdown")
                 except:
                     bot.send_message(message.chat.id,
-                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                                     f' @{username}  Твой мем набрал {ratio} лайков - больше всех на этой неделе', parse_mode="Markdown")
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
@@ -835,22 +843,22 @@ def get_text_messges(message):
                 bot.send_message(chat_id,
                                  f' @{username} ' + str(
                                      i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!', parse_mode="Markdown")
         elif int(data_id) == 1:
             bot.send_video(chat_id, data=photo_id)
             try:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
                                      i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
-                                 reply_to_message_id=message_id)
+                                 reply_to_message_id=message_id, parse_mode="Markdown")
             except:
                 bot.send_message(chat_id,
                                  f' @{username}  ' + str(
-                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+                                     i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!', parse_mode="Markdown")
 
 
 @bot.message_handler(commands=['helper'])
@@ -880,6 +888,16 @@ def help(message):
            f'\n'
     bot.send_message(message.chat.id, text)
 
+
+@bot.message_handler('name')
+def echo_message(message):
+    cid = message.chat.id
+    message_text = message.text
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+    mention = "["+user_name+"](tg://user?id="+str(user_id)+")"
+
+    bot.send_message(cid,"Hi, " + mention)
 
 @bot.message_handler(commands=['message'])
 def start1(message):
