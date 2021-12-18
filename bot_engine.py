@@ -815,11 +815,13 @@ def get_text_messges(message):
 @bot.message_handler(commands=['antitophunya'])
 def get_text_messges(message):
     chat_id = message.chat.id
-    mem_chat = -1001210399850
+    mem_chat = chat_id
     db_worker = SQLighter(config.database_name)
     top = db_worker.anti_ratio_rating_all_time(mem_chat)
     db_worker.close()
     i = 0
+    test_top= (" ".join(map(str,top)))
+    bot.send_message(chat_id, test_top)
     for el in top:
 
         ratio = top[i][6]
