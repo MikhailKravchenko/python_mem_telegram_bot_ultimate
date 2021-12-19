@@ -877,7 +877,10 @@ def help(message):
            f'' \
            f'\n' \
            f'/antitophunya посмотреть топы дизлайков\n' \
+           f'\n' \
+           f'/load узнать photo_id\n' \
            f'\n'
+
     bot.send_message(message.chat.id, text)
 
 
@@ -893,9 +896,36 @@ def get_photo_id(message):
 @bot.message_handler('f')
 def set_f(message):
     list_photo_id =[
+        'AgACAgIAAxkBAAIbeWG_wG91XsfV-dGUxCy6_RHFAAE9gAACW7QxG2waAUpXMmLDR2MLpAEAAwIAA3MAAyME',
+        'AgACAgIAAxkBAAIbfWG_wLmbcDKUSkGMdfqD5ju_bB6cAAJctDEbbBoBSkhMPdxI-rnBAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbgWG_wNAUjoUg4ORLRvrOCVe0RIu6AAJdtDEbbBoBSrr9zpyEdA9rAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbhWG_wOP1rcik7qpW_0Hy-IWCwmRLAAJetDEbbBoBSliW8YSFD9BgAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbiWG_wS5WqHinAl9UKAdP5RIlLLWBAAJftDEbbBoBSv4Bgq52QKUAAQEAAwIAA3MAAyME',
+        'AgACAgIAAxkBAAIbjWG_wXa5Rz8-qsDp3b7lhz41XrzaAAJgtDEbbBoBSgbKSIt05hCUAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbkWG_wZ7d5rg29m5T3rCgTAW6PMhLAAJhtDEbbBoBShZDcd3ieRBvAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIblWG_wbpuqMTTPoUs47lw_aLqAo2nAAJitDEbbBoBShpObOBI_NzFAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbmWG_weEeHm-GVSCiiI_wnx7BN1mwAAJjtDEbbBoBSif7nJNvm59WAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbnWG_wfpNCCv7vKNzIbgWoTVtrrYQAAJktDEbbBoBSkttRgkyXNbxAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIboWG_whGd2rvNDVXzo5q_8Zf5nfHlAAJltDEbbBoBSu2mrJbHZlULAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbpWG_wj4KLNEObF5Q636nZXEdyY5VAAJmtDEbbBoBSoft60dQ5Q4uAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbqWG_wr3KH9caZDM6Rfd_rIi0V1eIAAJotDEbbBoBSh6eSrT2N7xCAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbrWG_ws_KR0jI8scPzqMEYcgqWemOAAJptDEbbBoBSgjxW-grDpJuAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbsWG_wuJO7SE9WJ3BvTPr-jzMv7MhAAJqtDEbbBoBSl6I6_UyMWG0AQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbtWG_wvf5OvRR4lR5WyKEIQG2VCUoAAJrtDEbbBoBSiP00jFt0LZOAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbuWG_ww7cVVpje_ozVO1tSrNBiumCAAJstDEbbBoBSlfWEuWlj3AsAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbvWG_wyCXuG1aIYOQUAo0oCMuxIzNAAJttDEbbBoBSkaf_czVTG99AQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbwWG_w0iJWcSZ4JdLWTviyltMttIQAAJutDEbbBoBSuoWRrj3my_5AQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbxWG_w1rnu5B66YBa00TiYSMj1PIRAAJvtDEbbBoBStIp5wrlhNdtAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbyWG_w3IBmHpzP5eJ4p-WYBNrtqVyAAJwtDEbbBoBSsmSF_2cWBUnAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIbzWG_w4ESqG-3TMyPz4v7IHEY50bjAAJxtDEbbBoBSu4cQ7NurWsIAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIb0WG_w5GUXI_GQtJaR1xEz6v3DgABJAACcrQxG2waAUrGYxvDGK7QVQEAAwIAA3MAAyME',
+        'AgACAgIAAxkBAAIb1WG_w56wr6zjlGAUs2HSPv_mQi5gAAJztDEbbBoBSgIjRo8ltMrpAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIb2WG_w61up44V4RCshAIwVt84dQUWAAJ0tDEbbBoBSlKec5khr1BwAQADAgADcwADIwQ',
+        'AgACAgIAAxkBAAIb3WG_w9aakf8eB38B8Z-BElK3CFpmAAJ1tDEbbBoBSjpDmQo7RU2pAQADAgADcwADIwQ',
+
 
     ]
-    photo_id= list_photo_id
+    photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
     bot.send_photo(message.chat.id, photo=photo_id)
 
 
