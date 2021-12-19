@@ -895,6 +895,7 @@ def set_f(message):
     list_photo_id =[
 
     ]
+    photo_id= list_photo_id
     bot.send_photo(message.chat.id, photo=photo_id)
 
 
