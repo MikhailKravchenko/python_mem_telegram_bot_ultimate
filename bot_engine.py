@@ -92,7 +92,7 @@ app.router.add_post('/{token}/', handle)
 
 
 @bot.message_handler(commands=['mem'])
-def lession(message):
+def get_mem(message):
     if message.chat.id == -532856839:
         chat_id = -1001210399850
         x = utils.get_id_photo_for_chat(chat_id)
@@ -113,7 +113,7 @@ def lession(message):
 
 
 @bot.message_handler(commands=['happy1'])
-def lession(message):
+def happy_1(message):
     if message.chat.id == -532856839:
         chat_id = -1001210399850
 
@@ -130,7 +130,7 @@ def lession(message):
 
 
 @bot.message_handler(commands=['happy2'])
-def lession(message):
+def happy_2(message):
     if message.chat.id == -532856839:
         chat_id = -1001210399850
 
@@ -147,7 +147,7 @@ def lession(message):
 
 
 @bot.message_handler(commands=['gud'])
-def get_text_messages(message):
+def good_message(message):
     if message.chat.id == -532856839:
         # Отсылаем в чат
         message.chat.id = -1001210399850
@@ -167,7 +167,7 @@ def get_text_messages(message):
 
 
 @bot.message_handler(content_types=["new_chat_members"])
-def handler_new_member(message):
+def hi_new_member(message):
     # достаем имя пользователя
     user_name = message.new_chat_member.first_name
     # выбираем рандомно одно из приветствий и отправляем в чат
@@ -306,7 +306,7 @@ def callback(c):
 
 
 @bot.message_handler(content_types=['photo'])
-def handle_docs_audio(message):
+def set_photo(message):
     # ЗАливка мемов в бд
 
     if message.chat.id == -532856839:
@@ -456,7 +456,7 @@ def start(message):
 
 
 @bot.message_handler(commands=['top7'])
-def get_text_messges(message):
+def top_7(message):
     if message.chat.id == -1001210399850:
         return
     elif message.chat.id == -532856839:
@@ -525,7 +525,7 @@ def get_text_messges(message):
 
 
 @bot.message_handler(commands=['top30'])
-def get_text_messges(message):
+def top_30(message):
     if message.chat.id == -1001210399850:
         return
     elif message.chat.id == -532856839:
@@ -599,7 +599,7 @@ def get_text_messges(message):
 
 
 @bot.message_handler(content_types=['video'])
-def get_text_messages(message):
+def set_viseo(message):
     video_id = message.video.file_id
     chat_id = message.chat.id
     user_id = message.from_user.username
@@ -622,7 +622,7 @@ def get_text_messages(message):
 
 
 @bot.message_handler(commands=['tophunya7'])
-def get_text_messges(message):
+def top_hunya_7(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
@@ -663,7 +663,7 @@ def get_text_messges(message):
 
 
 @bot.message_handler(commands=['tophunya30'])
-def get_text_messges(message):
+def top_hunya_30(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
 
@@ -705,7 +705,7 @@ def get_text_messges(message):
 
 
 @bot.message_handler(commands=['tophunya'])
-def get_text_messges(message):
+def top_hunya(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
@@ -745,7 +745,7 @@ def get_text_messges(message):
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
 
 @bot.message_handler(commands=['top'])
-def get_text_messges(message):
+def top(message):
     if message.chat.id == -1001210399850:
         return
     elif message.chat.id == -532856839:
@@ -813,7 +813,7 @@ def get_text_messges(message):
                              f'Нет ни одного мема в базе')
 
 @bot.message_handler(commands=['antitophunya'])
-def get_text_messges(message):
+def anti_top_hunya(message):
     chat_id = message.chat.id
     mem_chat = -1001210399850
     db_worker = SQLighter(config.database_name)
@@ -880,6 +880,35 @@ def help(message):
            f'\n'
     bot.send_message(message.chat.id, text)
 
+
+@bot.message_handler('load')
+def load_photo(message):
+    msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
+    bot.register_next_step_handler(msgPrice, get_photo_id)
+
+def get_photo_id(message):
+    x = message.photo[0].file_id
+    bot.send_message(message.chat.id, x)
+
+@bot.message_handler('f')
+def set_f(message):
+    list_photo_id =[
+
+    ]
+    bot.send_photo(message.chat.id, photo=photo_id)
+
+
+@bot.message_handler('name')
+def get_name(message):
+    if message.chat.title == 'None':
+        print('yes')
+    print(message.chat.title)
+    cid = message.chat.id
+    user_id = message.from_user.id
+    user_name = message.from_user.first_name
+    mention = "["+user_name+"](tg://user?id="+str(user_id)+")"
+
+    bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
 @bot.message_handler(commands=['message'])
 def start1(message):
