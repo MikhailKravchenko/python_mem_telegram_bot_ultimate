@@ -391,9 +391,10 @@ def set_photo(message):
         try:
 
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                             reply_markup=markup, parse_mode="Markdown")
+                             reply_markup=markup)
         except TypeError:
-            bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
+            bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+                             reply_markup=markup, parse_mode="Markdown")
         except:
             img = open('animation.gif.mp4', 'rb')
             bot.send_video(message.chat.id, img)
@@ -631,9 +632,10 @@ def set_viseo(message):
     markup.add(bt1, bt2)
     try:
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                         reply_markup=markup, parse_mode="Markdown")
+                         reply_markup=markup)
     except TypeError:
-        bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
+        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+                         reply_markup=markup, parse_mode="Markdown")
     except:
         img = open('animation.gif.mp4', 'rb')
         bot.send_video(message.chat.id, img)
