@@ -247,6 +247,11 @@ class SQLighter:
             chat_id = message.chat.id
             user_id = message.from_user.id
             username = message.from_user.username
+            if username is None:
+                user_id_id = message.from_user.id
+                user_name = message.from_user.first_name
+                username = "[" + user_name + "](tg://user?id=" + str(user_id_id) + ")"
+
             x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?' ,
                                     (user_id, chat_id)).fetchall()
 
