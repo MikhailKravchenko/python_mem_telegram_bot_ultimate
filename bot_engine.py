@@ -895,7 +895,7 @@ def help(message):
            f'\n' \
            f'/load узнать photo_id\n' \
            f'\n' \
-           f'/send_to_chat отправить фото в чат мемов\n' \
+           f'/send_to_chat отправить фото в чат мемов (для отмены сообщение "стоп")\n' \
            f'\n' \
 
     bot.send_message(message.chat.id, text)
@@ -914,7 +914,12 @@ def load_photo(message):
     bot.register_next_step_handler(msgPrice, get_photo_id)
 
 def send_to_chat(message):
+    if message.text == 'стоп' or message.text == 'Стоп' or message.text == 'СТОП':
+        return
+
     x = message.photo[0].file_id
+    if x is None:
+        return
     chat_id = -1001210399850
     bot.send_photo(chat_id, x)
 
