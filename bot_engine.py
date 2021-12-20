@@ -209,8 +209,7 @@ def callback(c):
 
         user_id = c.from_user.username
         if user_id is None:
-            bot.answer_callback_query(c.id, text='Вам необходимо заполнить username, что бы голосовать')
-            return
+            user_id =c.from_user.id
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
@@ -257,8 +256,7 @@ def callback(c):
 
         user_id = c.from_user.username
         if user_id is None:
-            bot.answer_callback_query(c.id, text='Вам необходимо заполнить username, что бы голосовать')
-            return
+            user_id =c.from_user.id
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
@@ -900,18 +898,18 @@ def help(message):
 
     bot.send_message(message.chat.id, text)
 
+
 @bot.message_handler(commands=['send_to_chat'])
 def send_photo_to_chat(message):
-
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, send_to_chat)
-
 
 
 @bot.message_handler(commands=['load'])
 def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, get_photo_id)
+
 
 def send_to_chat(message):
     if message.text == 'стоп' or message.text == 'Стоп' or message.text == 'СТОП':
