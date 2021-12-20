@@ -368,6 +368,8 @@ def set_photo(message):
         #     like
 
         user_id = message.from_user.username
+        if user_id is None:
+            user_id= get_name(message)
         message_id = message.message_id
         chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
@@ -383,9 +385,13 @@ def set_photo(message):
         try:
 
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                             reply_markup=markup)
+                             reply_markup=markup,parse_mode="Markdown")
         except TypeError:
             bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
+        except:
+            img = open('animation.gif.mp4', 'rb')
+            bot.send_video(message.chat.id, img)
+            img.close()
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
@@ -603,6 +609,9 @@ def set_viseo(message):
     video_id = message.video.file_id
     chat_id = message.chat.id
     user_id = message.from_user.username
+    user_id = message.from_user.username
+    if user_id is None:
+        user_id = get_name(message)
     message_id = message.message_id
     data_id = 1
     db_worker = SQLighter(config.database_name)
@@ -616,9 +625,13 @@ def set_viseo(message):
     markup.add(bt1, bt2)
     try:
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                         reply_markup=markup)
+                         reply_markup=markup, parse_mode="Markdown")
     except TypeError:
         bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
+    except :
+        img = open('animation.gif.mp4', 'rb')
+        bot.send_video(message.chat.id, img)
+        img.close()
 
 
 @bot.message_handler(commands=['tophunya7'])
@@ -884,7 +897,7 @@ def help(message):
     bot.send_message(message.chat.id, text)
 
 
-@bot.message_handler('load')
+@bot.message_handler(commands=['load'])
 def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, get_photo_id)
@@ -893,7 +906,7 @@ def get_photo_id(message):
     x = message.photo[0].file_id
     bot.send_message(message.chat.id, x)
 
-@bot.message_handler('f')
+@bot.message_handler(commands=['f'])
 def set_f(message):
     list_photo_id =[
         'AgACAgIAAxkBAAIbeWG_wG91XsfV-dGUxCy6_RHFAAE9gAACW7QxG2waAUpXMmLDR2MLpAEAAwIAA3MAAyME',
@@ -929,17 +942,13 @@ def set_f(message):
     bot.send_photo(message.chat.id, photo=photo_id)
 
 
-@bot.message_handler('name')
 def get_name(message):
-    if message.chat.title == 'None':
-        print('yes')
-    print(message.chat.title)
-    cid = message.chat.id
     user_id = message.from_user.id
     user_name = message.from_user.first_name
     mention = "["+user_name+"](tg://user?id="+str(user_id)+")"
+    return mention
+    # bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
-    bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
 @bot.message_handler(commands=['message'])
 def start1(message):
@@ -1002,6 +1011,11 @@ def start1(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
+    img = open('animation.gif.mp4', 'rb')
+    bot.send_video(message.chat.id, img)
+    img.close()
+
+
     m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null',
                                                                                                      '"null"').replace(
         'None', '"None"')
