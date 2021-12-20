@@ -9,12 +9,9 @@ import re
 import sqlite3
 import ssl
 
-from datetime import datetime
 import logging.config
-import flask
 from aiohttp import web
 import logging
-import time
 import utils
 import config
 import env
@@ -22,7 +19,6 @@ import telebot
 from telebot import types
 import hash_image
 from SQLighter import SQLighter
-from gevent.pywsgi import WSGIServer
 from pythonjsonlogger import jsonlogger
 
 bot = telebot.TeleBot(env.token)
@@ -158,9 +154,6 @@ def good_message(message):
 
         bot.send_photo(message.chat.id, photo=photo_id)
 
-    else:
-        None
-
 
 """
 Приветствие вновь прибывших
@@ -217,7 +210,7 @@ def callback(c):
 
         user_id = c.from_user.username
         if user_id is None:
-            user_id =c.from_user.id
+            user_id = c.from_user.id
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
@@ -264,7 +257,7 @@ def callback(c):
 
         user_id = c.from_user.username
         if user_id is None:
-            user_id =c.from_user.id
+            user_id = c.from_user.id
 
         db_worker = SQLighter(config.database_name)
         like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
@@ -331,8 +324,6 @@ def set_photo(message):
         # удаляем файл
         if os.path.isfile(src):
             os.remove(src)
-        else:
-            None
 
         # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
         db_worker = SQLighter(config.database_name)
@@ -394,7 +385,7 @@ def set_photo(message):
         except TypeError:
             if user_id is None:
                 user_id = get_name(message)
-            bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+            bot.send_message(message.chat.id, 'Оцени мем от ' + user_id + ' ' + u'\U0001F446',
                              reply_markup=markup, parse_mode="Markdown")
         except:
             img = open('animation.gif.mp4', 'rb')
@@ -411,8 +402,6 @@ def set_photo(message):
         # удаляем файл
         if os.path.isfile(src):
             os.remove(src)
-        else:
-            None
 
         # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
         db_worker = SQLighter(config.database_name)
@@ -617,7 +606,6 @@ def set_viseo(message):
     video_id = message.video.file_id
     chat_id = message.chat.id
     user_id = message.from_user.username
-    user_id = message.from_user.username
 
     message_id = message.message_id
     data_id = 1
@@ -636,7 +624,7 @@ def set_viseo(message):
     except TypeError:
         if user_id is None:
             user_id = get_name(message)
-        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+        bot.send_message(message.chat.id, 'Оцени мем от ' + user_id + ' ' + u'\U0001F446',
                          reply_markup=markup, parse_mode="Markdown")
     except:
         img = open('animation.gif.mp4', 'rb')
@@ -1061,8 +1049,6 @@ def get_text_messages(message):
         photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
 
         bot.send_photo(message.chat.id, photo=photo_id)
-    else:
-        None
 
 
 if env.webhook is True:
