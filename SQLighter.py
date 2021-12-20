@@ -247,16 +247,14 @@ class SQLighter:
             chat_id = message.chat.id
             user_id = message.from_user.id
             username = message.from_user.username
-            # x = self.cursor.execute('SELECT chat_id FROM botengine_idusers WHERE created_by=?',
-            #                         (username,)).fetchall()
-            # for item in x:
-            #     for y in item:
-            #         chat_id.append(y)
-            # if str(message.chat.id) in chat_id:
-            #     None
-            #
-            # else:
-            self.cursor.execute(
+            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?' ,
+                                    (user_id, chat_id)).fetchall()
+
+            if x:
+                None
+
+            else:
+                self.cursor.execute(
                 'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
                     user_id) + '\',\'' + str(
                     chat_id) + '\',\'' + str(username) + '\')')
