@@ -158,13 +158,15 @@ class SQLighter:
 
         return ratio_value
 
-    def anti_ratio_rating_all_time (self, chat_id):
+    def anti_ratio_rating_all_time(self, chat_id):
 
         with self.connection:
             ratio_value = self.cursor.execute(
-                'SELECT * FROM ratio WHERE chat_id = '+ str(chat_id) +'  ORDER BY ratio_dislike_value DESC LIMIT 3').fetchall()
+                'SELECT * FROM ratio WHERE chat_id = ' + str(
+                    chat_id) + '  ORDER BY ratio_dislike_value DESC LIMIT 3').fetchall()
 
         return ratio_value
+
     def ratio_rating_all_time_for_top(self, chat_id):
 
         with self.connection:
@@ -239,6 +241,25 @@ class SQLighter:
         return ratio_id
 
         return ratio_id
+
+    def save_id_chat(self, message):
+        with self.connection:
+            chat_id = message.chat.id
+            user_id = message.from_user.id
+            username = message.from_user.username
+            # x = self.cursor.execute('SELECT chat_id FROM botengine_idusers WHERE created_by=?',
+            #                         (username,)).fetchall()
+            # for item in x:
+            #     for y in item:
+            #         chat_id.append(y)
+            # if str(message.chat.id) in chat_id:
+            #     None
+            #
+            # else:
+            self.cursor.execute(
+                'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
+                    user_id) + '\',\'' + str(
+                    chat_id) + '\',\'' + str(username) + '\')')
 
     def close(self):
         """ Закрываем текущее соединение с БД """

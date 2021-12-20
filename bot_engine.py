@@ -6,6 +6,7 @@ import json
 import os
 import random
 import re
+import sqlite3
 import ssl
 
 from datetime import datetime
@@ -168,6 +169,13 @@ def good_message(message):
 
 @bot.message_handler(content_types=["new_chat_members"])
 def hi_new_member(message):
+    db_worker = SQLighter(config.database_name)
+
+    try:
+        db_worker.save_id_chat(message)
+    except sqlite3.IntegrityError:
+        None
+    db_worker.close()
     # достаем имя пользователя
     user_name = message.new_chat_member.first_name
     # выбираем рандомно одно из приветствий и отправляем в чат
@@ -1038,7 +1046,13 @@ def get_text_messages(message):
     o = json.loads(n)
     d = {"message_": o}
     logging.info('User Message', extra=d)
+    db_worker = SQLighter(config.database_name)
 
+    try:
+        db_worker.save_id_chat(message)
+    except sqlite3.IntegrityError:
+        None
+    db_worker.close()
     if message.text == "Как тебе мем?":
         photo_id = 'AgACAgIAAx0CSCU8agACDUtgwOcC6LjfltASaCFDKTlrL3xkKwACRLQxG36qCUrKMzSvBkjb_ooQZ5MuAAMBAAMCAANzAAMKNQIAAR8E'
 
