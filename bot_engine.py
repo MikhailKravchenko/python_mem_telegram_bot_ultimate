@@ -894,15 +894,29 @@ def help(message):
            f'/antitophunya посмотреть топы дизлайков\n' \
            f'\n' \
            f'/load узнать photo_id\n' \
-           f'\n'
+           f'\n' \
+           f'/send_to_chat отправить фото в чат мемов\n' \
+           f'\n' \
 
     bot.send_message(message.chat.id, text)
+
+@bot.message_handler(commands=['send_to_chat'])
+def send_photo_to_chat(message):
+
+    msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
+    bot.register_next_step_handler(msgPrice, send_to_chat)
+
 
 
 @bot.message_handler(commands=['load'])
 def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, get_photo_id)
+
+def send_to_chat(message):
+    x = message.photo[0].file_id
+    chat_id = -1001210399850
+    bot.send_photo(chat_id, x)
 
 
 def get_photo_id(message):
