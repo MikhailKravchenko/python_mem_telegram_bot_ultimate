@@ -374,8 +374,7 @@ def set_photo(message):
         #     like
 
         user_id = message.from_user.username
-        if user_id is None:
-            user_id = get_name(message)
+
         message_id = message.message_id
         chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
@@ -393,6 +392,8 @@ def set_photo(message):
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                              reply_markup=markup)
         except TypeError:
+            if user_id is None:
+                user_id = get_name(message)
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                              reply_markup=markup, parse_mode="Markdown")
         except:
@@ -617,8 +618,7 @@ def set_viseo(message):
     chat_id = message.chat.id
     user_id = message.from_user.username
     user_id = message.from_user.username
-    if user_id is None:
-        user_id = get_name(message)
+
     message_id = message.message_id
     data_id = 1
     db_worker = SQLighter(config.database_name)
@@ -634,6 +634,8 @@ def set_viseo(message):
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                          reply_markup=markup)
     except TypeError:
+        if user_id is None:
+            user_id = get_name(message)
         bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
                          reply_markup=markup, parse_mode="Markdown")
     except:
