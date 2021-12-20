@@ -26,11 +26,11 @@ from pythonjsonlogger import jsonlogger
 
 bot = telebot.TeleBot(env.token)
 WEBHOOK_HOST = '217.163.29.237'
-WEBHOOK_PORT = 8443 # 443, 80, 88 or 8443 (port need to be 'open')
-WEBHOOK_LISTEN = '217.163.29.237' # In some VPS you may need to put here the IP addr
+WEBHOOK_PORT = 8443  # 443, 80, 88 or 8443 (port need to be 'open')
+WEBHOOK_LISTEN = '217.163.29.237'  # In some VPS you may need to put here the IP addr
 
-WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem' # Path to the ssl certificate
-WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem' # Path to the ssl private key
+WEBHOOK_SSL_CERT = '/home/lukas/cert/webhook_cert.pem'  # Path to the ssl certificate
+WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem'  # Path to the ssl private key
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (env.token)
 #
@@ -369,7 +369,7 @@ def set_photo(message):
 
         user_id = message.from_user.username
         if user_id is None:
-            user_id= get_name(message)
+            user_id = get_name(message)
         message_id = message.message_id
         chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
@@ -385,7 +385,7 @@ def set_photo(message):
         try:
 
             bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
-                             reply_markup=markup,parse_mode="Markdown")
+                             reply_markup=markup, parse_mode="Markdown")
         except TypeError:
             bot.send_message(message.chat.id, 'Главное помнить, что ты никому ничего не должен')
         except:
@@ -628,7 +628,7 @@ def set_viseo(message):
                          reply_markup=markup, parse_mode="Markdown")
     except TypeError:
         bot.send_message(message.chat.id, 'Для участие в рейтинге необходимо заполнить Имя пользователя')
-    except :
+    except:
         img = open('animation.gif.mp4', 'rb')
         bot.send_video(message.chat.id, img)
         img.close()
@@ -757,6 +757,7 @@ def top_hunya(message):
                                  f' @{username}  ' + str(
                                      i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
 
+
 @bot.message_handler(commands=['top'])
 def top(message):
     if message.chat.id == -1001210399850:
@@ -824,6 +825,7 @@ def top(message):
         except IndexError:
             bot.send_message(message.chat.id,
                              f'Нет ни одного мема в базе')
+
 
 @bot.message_handler(commands=['antitophunya'])
 def anti_top_hunya(message):
@@ -902,13 +904,15 @@ def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, get_photo_id)
 
+
 def get_photo_id(message):
     x = message.photo[0].file_id
     bot.send_message(message.chat.id, x)
 
+
 @bot.message_handler(commands=['f'])
 def set_f(message):
-    list_photo_id =[
+    list_photo_id = [
         'AgACAgIAAxkBAAIbeWG_wG91XsfV-dGUxCy6_RHFAAE9gAACW7QxG2waAUpXMmLDR2MLpAEAAwIAA3MAAyME',
         'AgACAgIAAxkBAAIbfWG_wLmbcDKUSkGMdfqD5ju_bB6cAAJctDEbbBoBSkhMPdxI-rnBAQADAgADcwADIwQ',
         'AgACAgIAAxkBAAIbgWG_wNAUjoUg4ORLRvrOCVe0RIu6AAJdtDEbbBoBSrr9zpyEdA9rAQADAgADcwADIwQ',
@@ -936,7 +940,6 @@ def set_f(message):
         'AgACAgIAAxkBAAIb2WG_w61up44V4RCshAIwVt84dQUWAAJ0tDEbbBoBSlKec5khr1BwAQADAgADcwADIwQ',
         'AgACAgIAAxkBAAIb3WG_w9aakf8eB38B8Z-BElK3CFpmAAJ1tDEbbBoBSjpDmQo7RU2pAQADAgADcwADIwQ',
 
-
     ]
     photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
     bot.send_photo(message.chat.id, photo=photo_id)
@@ -945,7 +948,7 @@ def set_f(message):
 def get_name(message):
     user_id = message.from_user.id
     user_name = message.from_user.first_name
-    mention = "["+user_name+"](tg://user?id="+str(user_id)+")"
+    mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
     return mention
     # bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
@@ -1011,11 +1014,6 @@ def start1(message):
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message):
-    img = open('animation.gif.mp4', 'rb')
-    bot.send_video(message.chat.id, img)
-    img.close()
-
-
     m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null',
                                                                                                      '"null"').replace(
         'None', '"None"')
