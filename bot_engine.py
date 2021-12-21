@@ -1,7 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
-'''Github Action rules'''
+"""Github Action rules"""
 
-# @pirog - telegram
+"""@pirog - telegram"""
 import json
 import os
 import random
@@ -12,6 +12,8 @@ import ssl
 import logging.config
 from aiohttp import web
 import logging
+
+import servises
 import utils
 import config
 import env
@@ -31,8 +33,6 @@ WEBHOOK_SSL_PRIV = '/home/lukas/cert/webhook_pkey.pem'  # Path to the ssl privat
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (env.token)
 #
-# logger = telebot.logger
-# telebot.logger.setLevel(logging.INFO)
 
 
 logger = logging.getLogger(__name__)
@@ -58,29 +58,6 @@ async def handle(request):
 
 app.router.add_post('/{token}/', handle)
 
-# для вебхуков flask
-
-# app = flask.Flask(__name__)
-#
-#
-# # Empty webserver index, return nothing, just http 200
-# @app.route('/', methods=['GET', 'HEAD'])
-# def index():
-#     return ''
-#
-#
-# # Process webhook calls
-# @app.route(WEBHOOK_URL_PATH, methods=['POST'])
-# def webhook():
-#     if flask.request.headers.get('content-type') == 'application/json':
-#         json_string = flask.request.get_data().decode('utf-8')
-#         update = telebot.types.Update.de_json(json_string)
-#         bot.process_new_updates([update])
-#         return ''
-#     else:
-#         flask.abort(403)
-#
-#
 
 
 """"
@@ -384,7 +361,7 @@ def set_photo(message):
                              reply_markup=markup)
         except TypeError:
             if user_id is None:
-                user_id = get_name(message)
+                user_id = servises.get_name(message)
             bot.send_message(message.chat.id, 'Оцени мем от ' + user_id + ' ' + u'\U0001F446',
                              reply_markup=markup, parse_mode="Markdown")
         except:
@@ -623,7 +600,7 @@ def set_viseo(message):
                          reply_markup=markup)
     except TypeError:
         if user_id is None:
-            user_id = get_name(message)
+            user_id = servises.get_name(message)
         bot.send_message(message.chat.id, 'Оцени мем от ' + user_id + ' ' + u'\U0001F446',
                          reply_markup=markup, parse_mode="Markdown")
     except:
@@ -902,29 +879,14 @@ def help(message):
 @bot.message_handler(commands=['send_to_chat'])
 def send_photo_to_chat(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
-    bot.register_next_step_handler(msgPrice, send_to_chat)
+    bot.register_next_step_handler(msgPrice, servises.send_to_chat)
 
 
 @bot.message_handler(commands=['load'])
 def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
-    bot.register_next_step_handler(msgPrice, get_photo_id)
+    bot.register_next_step_handler(msgPrice, servises.get_photo_id)
 
-
-def send_to_chat(message):
-    if message.text == 'стоп' or message.text == 'Стоп' or message.text == 'СТОП':
-        return
-
-    x = message.photo[0].file_id
-    if x is None:
-        return
-    chat_id = -1001210399850
-    bot.send_photo(chat_id, x)
-
-
-def get_photo_id(message):
-    x = message.photo[0].file_id
-    bot.send_message(message.chat.id, x)
 
 
 @bot.message_handler(commands=['f'])
@@ -961,13 +923,6 @@ def set_f(message):
     photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
     bot.send_photo(message.chat.id, photo=photo_id)
 
-
-def get_name(message):
-    user_id = message.from_user.id
-    user_name = message.from_user.first_name
-    mention = "[" + user_name + "](tg://user?id=" + str(user_id) + ")"
-    return mention
-    # bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
 
 @bot.message_handler(commands=['message'])
@@ -1072,24 +1027,3 @@ else:
         bot.remove_webhook()
 
         bot.polling(none_stop=True)
-
-# для вебхуков flask
-# if env.webhook == True:
-#
-#     time.sleep(1)
-#     # app.config['ENV']='development'
-#     # Set webhook
-#     bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-#                     certificate=open(WEBHOOK_SSL_CERT, 'r'))
-#
-#     # Start flask server
-#     app.run(host=WEBHOOK_LISTEN,
-#             port=WEBHOOK_PORT,
-#             ssl_context=(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV),
-#             debug=False)
-# else:
-#
-#     if __name__ == '__main__':
-#         bot.remove_webhook()
-#
-#         bot.polling(none_stop=True)
