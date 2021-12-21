@@ -17,7 +17,7 @@ def send_to_chat(message):
     if x is None:
         return
     chat_id = -1001210399850
-    bot.send_photo(chat_id, x)
+    bot.send_photo(chat_id, x, caption=message.caption)
 
 
 def get_photo_id(message):

@@ -1,6 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
 """Github Action rules"""
-
 """@pirog - telegram"""
 import json
 import os
@@ -929,6 +928,7 @@ def set_f(message):
 
 @bot.message_handler(commands=['toplionhunya'])
 def set_f(message):
+    # starttime = time.time()
     if message.chat.id == -532856839:
         message.chat.id = -1001210399850
         chat_id=-532856839
@@ -941,6 +941,7 @@ def set_f(message):
         # print(user , ' - ',len(mem_ratio), '\n')
         pretop_lion_list = [len(mem_ratio),'@' +str(user +f' \n' )]
         top_lion_list.append(pretop_lion_list)
+    db_worker.close()
 
     top_lion_list.sort(reverse=True,key=servises.custom_key)
 
@@ -952,8 +953,8 @@ def set_f(message):
         top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
 
     bot.send_message(chat_id, top_lion_str)
-    db_worker.close()
-
+    # endtime = time.time()
+    # duration = endtime - starttime
 
 
 
