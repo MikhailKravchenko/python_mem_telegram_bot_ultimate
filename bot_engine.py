@@ -929,6 +929,9 @@ def set_f(message):
 
 @bot.message_handler(commands=['toplionhunya'])
 def set_f(message):
+    if message.chat.id == -532856839:
+        message.chat.id = -1001210399850
+        chat_id=-532856839
     db_worker = SQLighter(config.database_name)
     users=db_worker.top_lion_get_users(message)
     top_lion_list =[]
@@ -947,7 +950,7 @@ def set_f(message):
 
         top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
 
-    bot.send_message(message.chat.id, top_lion_str)
+    bot.send_message(chat_id, top_lion_str)
     db_worker.close()
 
 
