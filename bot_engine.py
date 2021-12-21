@@ -947,6 +947,7 @@ def set_f(message):
     top_lion_str=''
 
     for top_lion in top_lion_list:
+        if top_lion[0] == 0: break
 
         top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
 
