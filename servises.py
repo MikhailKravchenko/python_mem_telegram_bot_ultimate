@@ -33,3 +33,5 @@ def get_name(message):
     return mention
     # bot.send_message(cid,"Hi, " + mention + ' @' + message.from_user.username,parse_mode="Markdown")
 
+def custom_key(people):
+    return people[0]

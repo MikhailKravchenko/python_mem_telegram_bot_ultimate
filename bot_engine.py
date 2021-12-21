@@ -872,6 +872,8 @@ def help(message):
            f'\n' \
            f'/send_to_chat отправить фото в чат мемов (для отмены сообщение "стоп")\n' \
            f'\n' \
+           f'/toplionhunya - все самолайки' \
+           f'\n' \
 
     bot.send_message(message.chat.id, text)
 
@@ -922,6 +924,35 @@ def set_f(message):
     ]
     photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
     bot.send_photo(message.chat.id, photo=photo_id)
+
+
+
+@bot.message_handler(commands=['toplionhunya'])
+def set_f(message):
+    db_worker = SQLighter(config.database_name)
+    users=db_worker.top_lion_get_users(message)
+    top_lion_list =[]
+    for user in users:
+
+        mem_ratio= db_worker.top_lion_ratio(user)
+        # print(user , ' - ',len(mem_ratio), '\n')
+        pretop_lion_list = [len(mem_ratio),'@' +str(user +f' \n' )]
+        top_lion_list.append(pretop_lion_list)
+
+    top_lion_list.sort(reverse=True,key=servises.custom_key)
+
+    top_lion_str=''
+
+    for top_lion in top_lion_list:
+
+        top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
+
+    bot.send_message(message.chat.id, str(top_lion_str[:]))
+    db_worker.close()
+
+
+
+
 
 
 

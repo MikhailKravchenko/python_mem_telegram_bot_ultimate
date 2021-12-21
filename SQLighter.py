@@ -264,6 +264,38 @@ class SQLighter:
                     user_id) + '\',\'' + str(
                     chat_id) + '\',\'' + str(username) + '\')')
 
+
+    def top_lion_get_users(self, message):
+        with self.connection:
+            chat_id = message.chat.id
+
+            x = self.cursor.execute('SELECT DISTINCT user_id FROM ratio WHERE chat_id=?',(chat_id,)).fetchall()
+        users = []
+        for item in x:
+            for y in item:
+                users.append(y)
+        return users
+
+    def top_lion_get_mem_message(self, user):
+        with self.connection:
+
+            x = self.cursor.execute('SELECT ratio_id FROM ratio WHERE user_id=?',(user,)).fetchall()
+        mem_message = []
+        for item in x:
+            for y in item:
+                mem_message.append(y)
+        return mem_message
+
+    def top_lion_ratio(self, user):
+        with self.connection:
+
+            x = self.cursor.execute('SELECT ratio_like_id FROM ratio_like WHERE user_id = ? AND ratio_id in (SELECT ratio_id FROM ratio WHERE user_id=?)',(user,user)).fetchall()
+        users = []
+        for item in x:
+            for y in item:
+                users.append(y)
+        return users
+
     def close(self):
         """ Закрываем текущее соединение с БД """
         self.connection.close()
