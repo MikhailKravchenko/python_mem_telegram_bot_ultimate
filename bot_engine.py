@@ -947,7 +947,7 @@ def set_f(message):
 
         top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
 
-    bot.send_message(message.chat.id, str(top_lion_str[:]))
+    bot.send_message(message.chat.id, top_lion_str)
     db_worker.close()
 
 
