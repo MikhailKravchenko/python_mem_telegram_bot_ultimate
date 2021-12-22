@@ -57,8 +57,6 @@ async def handle(request):
 
 app.router.add_post('/{token}/', handle)
 
-
-
 """"
 отправка мема в чат
 """
@@ -873,7 +871,7 @@ def help(message):
            f'\n' \
            f'/toplionhunya - все самолайки' \
            f'\n' \
-
+        # \
     bot.send_message(message.chat.id, text)
 
 
@@ -887,7 +885,6 @@ def send_photo_to_chat(message):
 def load_photo(message):
     msgPrice = bot.send_message(message.chat.id, 'Присылай фото:')
     bot.register_next_step_handler(msgPrice, servises.get_photo_id)
-
 
 
 @bot.message_handler(commands=['f'])
@@ -925,40 +922,55 @@ def set_f(message):
     bot.send_photo(message.chat.id, photo=photo_id)
 
 
-
 @bot.message_handler(commands=['toplionhunya'])
-def set_f(message):
+def set_top_lion(message):
     # starttime = time.time()
     if message.chat.id == -532856839:
         message.chat.id = -1001210399850
-        chat_id=-532856839
+        chat_id = -532856839
     db_worker = SQLighter(config.database_name)
-    users=db_worker.top_lion_get_users(message)
-    top_lion_list =[]
+    users = db_worker.top_lion_get_users(message)
+    top_lion_list = []
     for user in users:
-
-        mem_ratio= db_worker.top_lion_ratio(user)
+        mem_ratio = db_worker.top_lion_ratio(user)
         # print(user , ' - ',len(mem_ratio), '\n')
-        pretop_lion_list = [len(mem_ratio),'@' +str(user +f' \n' )]
+        pretop_lion_list = [len(mem_ratio), '@' + str(user + f' \n')]
         top_lion_list.append(pretop_lion_list)
     db_worker.close()
 
-    top_lion_list.sort(reverse=True,key=servises.custom_key)
+    top_lion_list.sort(reverse=True, key=servises.custom_key)
 
-    top_lion_str=''
+    top_lion_str = ''
 
     for top_lion in top_lion_list:
         if top_lion[0] == 0: break
 
-        top_lion_str= top_lion_str + str(top_lion[0]) +' - ' + str(top_lion[1])
+        top_lion_str = top_lion_str + str(top_lion[0]) + ' - ' + str(top_lion[1])
 
     bot.send_message(chat_id, top_lion_str)
     # endtime = time.time()
     # duration = endtime - starttime
 
 
+@bot.message_handler(commands=['debt'])
+def set_f(message):
+    if message.chat.id == -532856839:
+        message.chat.id = -1001210399850
+        chat_id = -532856839
+    db_worker = SQLighter(config.database_name)
+    users = db_worker.get_users_from_chat(message)
+    debt_users = []
+    for user in users:
+        ou = db_worker.check_mem_chat(message, user)
+        if ou is False:
+            debt_users.append(user)
+    db_worker.close()
+    debt_users_str = ''
 
+    for debt in debt_users:
+        debt_users_str = debt_users_str + '@ ' + str(debt) + f' \n'
 
+    bot.send_message(chat_id, debt_users_str)
 
 
 @bot.message_handler(commands=['message'])

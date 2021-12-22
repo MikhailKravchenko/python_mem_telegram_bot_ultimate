@@ -276,16 +276,6 @@ class SQLighter:
                 users.append(y)
         return users
 
-    def top_lion_get_mem_message(self, user):
-        with self.connection:
-
-            x = self.cursor.execute('SELECT ratio_id FROM ratio WHERE user_id=?',(user,)).fetchall()
-        mem_message = []
-        for item in x:
-            for y in item:
-                mem_message.append(y)
-        return mem_message
-
     def top_lion_ratio(self, user):
         with self.connection:
 
@@ -295,6 +285,30 @@ class SQLighter:
             for y in item:
                 users.append(y)
         return users
+
+    def get_users_from_chat(self,message):
+        with self.connection:
+            chat_id = message.chat.id
+            x = self.cursor.execute('SELECT username FROM user WHERE chat_id=?', (chat_id,)).fetchall()
+        users = []
+        for item in x:
+            for y in item:
+                users.append(y)
+        return users
+
+    def check_mem_chat(self,message, user):
+        with self.connection:
+            chat_id = message.chat.id
+            x = self.cursor.execute('SELECT DISTINCT user_id FROM ratio WHERE user_id=?', (user,)).fetchall()
+        users = []
+        for item in x:
+            for y in item:
+                users.append(y)
+
+
+        return bool(users)
+
+
 
     def close(self):
         """ Закрываем текущее соединение с БД """

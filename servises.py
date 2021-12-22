@@ -4,8 +4,6 @@ import env
 
 from telebot import types
 
-
-
 bot = telebot.TeleBot(env.token)
 
 
@@ -19,12 +17,9 @@ def send_to_chat(message):
     chat_id = -1001210399850
     bot.send_photo(chat_id, x, caption=message.caption)
 
-
 def get_photo_id(message):
     x = message.photo[0].file_id
     bot.send_message(message.chat.id, x)
-
-
 
 def get_name(message):
     user_id = message.from_user.id
