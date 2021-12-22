@@ -967,7 +967,10 @@ def set_f(message):
         if ou is False:
             debt_users.append(user)
     db_worker.close()
+
+    if bool(debt_users) is False: return bot.send_message(chat_id, 'Долгов нет')
     debt_users_str = ''
+
 
     for debt in debt_users:
         debt_users_str = debt_users_str + '@ ' + str(debt) + f' \n'
