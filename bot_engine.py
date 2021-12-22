@@ -871,6 +871,8 @@ def help(message):
            f'\n' \
            f'/toplionhunya - все самолайки' \
            f'\n' \
+           f'/debt долги по мемам' \
+           f'\n' \
         # \
     bot.send_message(message.chat.id, text)
 
