@@ -339,7 +339,8 @@ def set_photo(message):
         #     like
 
         user_id = message.from_user.username
-
+        if user_id is None:
+            user_id = servises.get_name(message)
         message_id = message.message_id
         chat_id = message.chat.id
         db_worker = SQLighter(config.database_name)
@@ -354,7 +355,7 @@ def set_photo(message):
         markup.add(bt1, bt2)
         try:
 
-            bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+            bot.send_message(message.chat.id, 'Оцени мем от @' + message.from_user.username + ' ' + u'\U0001F446',
                              reply_markup=markup)
         except TypeError:
             if user_id is None:
@@ -580,7 +581,8 @@ def set_viseo(message):
     video_id = message.video.file_id
     chat_id = message.chat.id
     user_id = message.from_user.username
-
+    if user_id is None:
+        user_id = servises.get_name(message)
     message_id = message.message_id
     data_id = 1
     db_worker = SQLighter(config.database_name)
@@ -593,7 +595,7 @@ def set_viseo(message):
     bt2 = types.InlineKeyboardButton(u'\U0001F621' + ' 0', callback_data='Dislike_' + str(ratio_id))
     markup.add(bt1, bt2)
     try:
-        bot.send_message(message.chat.id, 'Оцени мем от @' + user_id + ' ' + u'\U0001F446',
+        bot.send_message(message.chat.id, 'Оцени мем от @' + message.from_user.username + ' ' + u'\U0001F446',
                          reply_markup=markup)
     except TypeError:
         if user_id is None:
