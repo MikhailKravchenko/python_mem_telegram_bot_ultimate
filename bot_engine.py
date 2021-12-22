@@ -176,6 +176,13 @@ def hi_new_member(message):
 
 @bot.callback_query_handler(func=lambda c: True)
 def callback(c):
+    db_worker = SQLighter(config.database_name)
+
+    try:
+        db_worker.save_id_chat(c.message)
+    except sqlite3.IntegrityError:
+        None
+    db_worker.close()
     data = c.data
     clear_data = re.sub(r'[^\w\s]+|[\d]+', r'', data).strip()
     if clear_data == 'Like_':
