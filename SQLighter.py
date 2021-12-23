@@ -264,6 +264,28 @@ class SQLighter:
                     user_id) + '\',\'' + str(
                     chat_id) + '\',\'' + str(username) + '\')')
 
+    def save_id_chat_callback(self, c):
+        with self.connection:
+            chat_id = c.message.chat.id
+            user_id = c.from_user.id
+            username = c.from_user.username
+            if username is None:
+                user_id_id = c.from_user.id
+                user_name = c.from_user.first_name
+                username = "[" + user_name + "](tg://user?id=" + str(user_id_id) + ")"
+
+            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?' ,
+                                    (user_id, chat_id)).fetchall()
+
+            if x:
+                None
+
+            else:
+                self.cursor.execute(
+                'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
+                    user_id) + '\',\'' + str(
+                    chat_id) + '\',\'' + str(username) + '\')')
+
 
     def top_lion_get_users(self, message):
         with self.connection:

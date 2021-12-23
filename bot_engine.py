@@ -179,7 +179,7 @@ def callback(c):
     db_worker = SQLighter(config.database_name)
 
     try:
-        db_worker.save_id_chat(c.message)
+        db_worker.save_id_chat_callback(c)
     except sqlite3.IntegrityError:
         None
     db_worker.close()
