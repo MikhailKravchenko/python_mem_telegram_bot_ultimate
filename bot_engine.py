@@ -288,7 +288,8 @@ def callback(c):
 @bot.message_handler(content_types=['photo'])
 def set_photo(message):
     # ЗАливка мемов в бд
-
+    if message.caption == 'nomem':
+        return
     if message.chat.id == -532856839:
         chat_id = -1001210399850
         photo_id = message.photo[-1].file_id
@@ -900,6 +901,7 @@ def load_photo(message):
 
 @bot.message_handler(commands=['f'])
 def set_f(message):
+    print(message.chat.id)
     list_photo_id = [
         'AgACAgIAAxkBAAIbeWG_wG91XsfV-dGUxCy6_RHFAAE9gAACW7QxG2waAUpXMmLDR2MLpAEAAwIAA3MAAyME',
         'AgACAgIAAxkBAAIbfWG_wLmbcDKUSkGMdfqD5ju_bB6cAAJctDEbbBoBSkhMPdxI-rnBAQADAgADcwADIwQ',
