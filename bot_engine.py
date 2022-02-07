@@ -280,9 +280,23 @@ def callback(c):
             bot.answer_callback_query(c.id, text='Ваш голос учтен')
 
             # bot.answer_callback_query(c.message.chat.id, 'Конфиг пуст', reply_markup=markup)
-
+    if data == 'get_groshi':
+        bot.answer_callback_query(c.id, text='Грошi высланы на счет')
 
 """Сбор фото мемов"""
+
+@bot.message_handler(commands=["cash"])
+def games_editor_1(message,):
+    # Смотрим есть ли сохраненый ранее конфиг у пользователей
+
+    # Создаем кнопки и записываем их в переменную
+    start_markup = telebot.types.InlineKeyboardMarkup()
+
+    # первый ряд (две кнопки)
+    btn0 = telebot.types.InlineKeyboardButton('Дайте грошi', callback_data='get_groshi')
+    start_markup.row(btn0)
+    bot.send_message(message.chat.id, 'Шо надо?',
+                                       reply_markup=start_markup)
 
 
 @bot.message_handler(content_types=['photo'])
