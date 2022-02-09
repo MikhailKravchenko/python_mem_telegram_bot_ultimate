@@ -107,13 +107,13 @@ def happy_2(message):
 
         bot.send_message(chat_id,
                          f"Зарплатонька пришла! <3")
-        video_id = 'BAACAgIAAxkBAAIF7WETfRw8K1_iDaks2SY9TnhRMtmYAALBEQACEs2ZSDzrW4IZoA1wIAQ'
+        video_id = 'BAACAgIAAxkBAAIi5GIDtRHNy4EMZvOoq712hREwZ66kAAITEgAC6feYSDxMbJ2_DrFOIwQ'
         bot.send_video(chat_id, video_id)
     else:
 
         bot.send_message(message.chat.id,
                          f"Зарплатонька пришла!")
-        video_id = 'BAACAgIAAxkBAAIF7WETfRw8K1_iDaks2SY9TnhRMtmYAALBEQACEs2ZSDzrW4IZoA1wIAQ'
+        video_id = 'BAACAgIAAxkBAAIi5GIDtRHNy4EMZvOoq712hREwZ66kAAITEgAC6feYSDxMbJ2_DrFOIwQ'
         bot.send_video(message.chat.id, video_id)
 
 
