@@ -601,6 +601,8 @@ def top_30(message):
 @bot.message_handler(content_types=['video'])
 def set_viseo(message):
     video_id = message.video.file_id
+    if message.chat.id == -532856839:
+        bot.send_message(message.chat.id, video_id )
     chat_id = message.chat.id
     user_id = message.from_user.username
     if user_id is None:
