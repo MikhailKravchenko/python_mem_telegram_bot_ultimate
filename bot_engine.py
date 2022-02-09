@@ -307,6 +307,8 @@ def set_photo(message):
     if message.chat.id == -532856839:
         chat_id = -1001210399850
         photo_id = message.photo[-1].file_id
+        if message.chat.id == -532856839:
+            bot.send_message(message.chat.id, photo_id)
         #     like
 
         # Сохраняем фото
