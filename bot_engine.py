@@ -116,6 +116,21 @@ def happy_2(message):
         video_id = 'BAACAgIAAxkBAAIi5GIDtRHNy4EMZvOoq712hREwZ66kAAITEgAC6feYSDxMbJ2_DrFOIwQ'
         bot.send_video(message.chat.id, video_id)
 
+@bot.message_handler(commands=['happy3'])
+def happy_2(message):
+    if message.chat.id == -532856839:
+        chat_id = -1001210399850
+
+        bot.send_message(chat_id,
+                         f"Зарплатонька пришла! <3")
+        video_id = 'BAACAgIAAxkBAAIlDmJTSwnTsUPvQ0FR_lSUFgaex5jsAAKIFwAChauISvleqVYrhMN_IwQ'
+        bot.send_video(chat_id, video_id)
+    else:
+
+        bot.send_message(message.chat.id,
+                         f"Зарплатонька пришла!")
+        video_id = 'BAACAgIAAxkBAAIlDmJTSwnTsUPvQ0FR_lSUFgaex5jsAAKIFwAChauISvleqVYrhMN_IwQ'
+        bot.send_video(message.chat.id, video_id)
 
 @bot.message_handler(commands=['gud'])
 def good_message(message):
