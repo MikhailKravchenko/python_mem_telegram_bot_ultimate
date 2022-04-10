@@ -123,13 +123,13 @@ def happy_2(message):
 
         bot.send_message(chat_id,
                          f"Зарплатонька пришла! <3")
-        video_id = 'BAACAgIAAxkBAAIlDmJTSwnTsUPvQ0FR_lSUFgaex5jsAAKIFwAChauISvleqVYrhMN_IwQ'
+        video_id = 'BAACAgIAAxkBAAIlFmJTTJgx0ZO7Tvp3KRVYLJuyNT4dAAIDGgACs1OYSlyrbCsG6j6EIwQ'
         bot.send_video(chat_id, video_id)
     else:
 
         bot.send_message(message.chat.id,
                          f"Зарплатонька пришла!")
-        video_id = 'BAACAgIAAxkBAAIlDmJTSwnTsUPvQ0FR_lSUFgaex5jsAAKIFwAChauISvleqVYrhMN_IwQ'
+        video_id = 'BAACAgIAAxkBAAIlFmJTTJgx0ZO7Tvp3KRVYLJuyNT4dAAIDGgACs1OYSlyrbCsG6j6EIwQ'
         bot.send_video(message.chat.id, video_id)
 
 @bot.message_handler(commands=['gud'])
