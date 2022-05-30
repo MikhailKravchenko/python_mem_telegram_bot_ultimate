@@ -1,5 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 """Github Action rules"""
+from datetime import datetime
+
 """@pirog - telegram"""
 import json
 import os
@@ -11,6 +13,7 @@ import ssl
 import logging.config
 from aiohttp import web
 import logging
+import requests
 
 import servises
 import utils
@@ -21,6 +24,7 @@ from telebot import types
 import hash_image
 from SQLighter import SQLighter
 from pythonjsonlogger import jsonlogger
+from wednesday import IMAGES
 
 bot = telebot.TeleBot(env.token)
 WEBHOOK_HOST = '217.163.29.237'
@@ -60,6 +64,23 @@ app.router.add_post('/{token}/', handle)
 """"
 отправка мема в чат
 """
+
+
+@bot.message_handler(commands=['wednesday'])
+def happy_1(message):
+    now = datetime.now()
+    day_now = datetime.isoweekday(now)
+
+    URL = IMAGES[day_now.__str__()][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
+    response = requests.get(URL)
+    src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
+    open(src, "wb").write(response.content)
+    immagesss = open(src, 'rb')
+    bot.send_photo(message.chat.id, immagesss)
+    del immagesss
+    if os.path.isfile(src):
+        os.remove(src)
+
 
 
 @bot.message_handler(commands=['mem'])
@@ -116,6 +137,7 @@ def happy_2(message):
         video_id = 'BAACAgIAAxkBAAIi5GIDtRHNy4EMZvOoq712hREwZ66kAAITEgAC6feYSDxMbJ2_DrFOIwQ'
         bot.send_video(message.chat.id, video_id)
 
+
 @bot.message_handler(commands=['happy3'])
 def happy_2(message):
     if message.chat.id == -532856839:
@@ -131,6 +153,7 @@ def happy_2(message):
                          f"Зарплатонька пришла!")
         video_id = 'BAACAgIAAxkBAAIlFmJTTJgx0ZO7Tvp3KRVYLJuyNT4dAAIDGgACs1OYSlyrbCsG6j6EIwQ'
         bot.send_video(message.chat.id, video_id)
+
 
 @bot.message_handler(commands=['gud'])
 def good_message(message):
@@ -298,10 +321,12 @@ def callback(c):
     if data == 'get_groshi':
         bot.answer_callback_query(c.id, text='Грошi высланы на счет')
 
+
 """Сбор фото мемов"""
 
+
 @bot.message_handler(commands=["cash"])
-def games_editor_1(message,):
+def games_editor_1(message, ):
     # Смотрим есть ли сохраненый ранее конфиг у пользователей
 
     # Создаем кнопки и записываем их в переменную
@@ -311,7 +336,7 @@ def games_editor_1(message,):
     btn0 = telebot.types.InlineKeyboardButton('Дайте грошi', callback_data='get_groshi')
     start_markup.row(btn0)
     bot.send_message(message.chat.id, 'Шо надо?',
-                                       reply_markup=start_markup)
+                     reply_markup=start_markup)
 
 
 @bot.message_handler(content_types=['photo'])
@@ -619,7 +644,7 @@ def top_30(message):
 def set_viseo(message):
     video_id = message.video.file_id
     if message.chat.id == -532856839:
-        bot.send_message(message.chat.id, video_id )
+        bot.send_message(message.chat.id, video_id)
     chat_id = message.chat.id
     user_id = message.from_user.username
     if user_id is None:
@@ -1014,7 +1039,6 @@ def set_f(message):
 
     if bool(debt_users) is False: return bot.send_message(chat_id, 'Долгов нет')
     debt_users_str = ''
-
 
     for debt in debt_users:
         debt_users_str = debt_users_str + '@ ' + str(debt) + f' \n'
