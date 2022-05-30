@@ -70,16 +70,31 @@ app.router.add_post('/{token}/', handle)
 def happy_1(message):
     now = datetime.now()
     day_now = datetime.isoweekday(now)
+    if day_now == 3:
+        URL = IMAGES[day_now.__str__()][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
+        response = requests.get(URL)
+        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
+        open(src, "wb").write(response.content)
+        immagesss = open(src, 'rb')
+        bot.send_photo(message.chat.id, immagesss)
+        del immagesss
+        if os.path.isfile(src):
+            os.remove(src)
+    else:
+        list_day = [str(day_now), 'any', 'notWednesday']
+        random_choice = random.choice(list_day)
+        print(random_choice)
+        URL = IMAGES[random_choice][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
 
-    URL = IMAGES[day_now.__str__()][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
-    response = requests.get(URL)
-    src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
-    open(src, "wb").write(response.content)
-    immagesss = open(src, 'rb')
-    bot.send_photo(message.chat.id, immagesss)
-    del immagesss
-    if os.path.isfile(src):
-        os.remove(src)
+        response = requests.get(URL)
+        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
+        open(src, "wb").write(response.content)
+        immagesss = open(src, 'rb')
+        bot.send_photo(message.chat.id, immagesss)
+        del immagesss
+        if os.path.isfile(src):
+            os.remove(src)
+
 
 
 

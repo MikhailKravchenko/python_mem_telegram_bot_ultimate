@@ -5,7 +5,6 @@ IMAGES = {
         'https://i.imgur.com/IJ4Y0Ku.png',
         'https://i.imgur.com/jyncHsa.png',
         'https://i.imgur.com/9WTtCJd.jpg',
-
         'https://i.imgur.com/Tioa26u.png',
     ],
     '2': [
@@ -17,7 +16,6 @@ IMAGES = {
         'https://i.imgur.com/fNaCgnq.jpg',
         'https://i.imgur.com/k2RW9ZN.jpg',
         'https://i.imgur.com/kRodDQE.jpg',
-
         'https://i.imgur.com/GlXexz3.jpg',
         'https://i.imgur.com/IJ4Y0Ku.png',
         'https://i.imgur.com/jyncHsa.png',
