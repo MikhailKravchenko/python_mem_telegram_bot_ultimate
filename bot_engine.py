@@ -83,7 +83,6 @@ def happy_1(message):
     else:
         list_day = [str(day_now), 'any', 'notWednesday']
         random_choice = random.choice(list_day)
-        print(random_choice)
         URL = IMAGES[random_choice][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
 
         response = requests.get(URL)
