@@ -83,7 +83,7 @@ def happy_1(message):
     else:
         list_day = [str(day_now), 'any', 'notWednesday']
         random_choice = random.choice(list_day)
-        URL = IMAGES[random_choice][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
+        URL = IMAGES[random_choice][random.randint(0, len(IMAGES[random_choice]) - 1)]
 
         response = requests.get(URL)
         src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
