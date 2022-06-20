@@ -388,7 +388,7 @@ def set_photo(message):
             bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
         else:
             if hash_images in rows:
-                bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
+                bot.send_message(message.chat.id, f"Похоже на этот мем... Если это так не удаляйте, он просто может собрать меньше лайков")
                 db_worker = SQLighter(config.database_name)
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                 db_worker.close()
@@ -467,7 +467,7 @@ def set_photo(message):
             bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
         else:
             if hash_images in rows:
-                bot.send_message(message.chat.id, f"Алярм!!! Походу баян...")
+                bot.send_message(message.chat.id, f"Похоже на этот мем... Если это так не удаляйте, он просто может собрать меньше лайков")
                 db_worker = SQLighter(config.database_name)
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                 db_worker.close()
@@ -478,7 +478,7 @@ def set_photo(message):
 
                     count = hash_image.CompareHash(key, hash_images)
                     if count < 2:
-                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
+                        bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%. Если это так не удаляйте, он просто может собрать меньше лайков")
                         db_worker = SQLighter(config.database_name)
                         bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
                         db_worker.close()
