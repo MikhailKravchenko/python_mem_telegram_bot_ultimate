@@ -73,7 +73,7 @@ def happy_1(message):
     if day_now == 3:
         URL = IMAGES[day_now.__str__()][random.randint(0, len(IMAGES[day_now.__str__()]) - 1)]
         response = requests.get(URL)
-        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
+        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg'
         open(src, "wb").write(response.content)
         immagesss = open(src, 'rb')
         bot.send_photo(message.chat.id, immagesss)
@@ -86,7 +86,7 @@ def happy_1(message):
         URL = IMAGES[random_choice][random.randint(0, len(IMAGES[random_choice]) - 1)]
 
         response = requests.get(URL)
-        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg';
+        src = os.getcwd() + '\\image\\' + str(message.date) + '.jpeg'
         open(src, "wb").write(response.content)
         immagesss = open(src, 'rb')
         bot.send_photo(message.chat.id, immagesss)
@@ -356,6 +356,8 @@ def set_photo(message):
     if message.caption:
         if 'nomem' in message.caption.lower():
             return
+        if 'флюгегехаймен' in message.caption.lower():
+            return
     if message.chat.id == -532856839:
         chat_id = -1001210399850
         photo_id = message.photo[-1].file_id
@@ -366,7 +368,7 @@ def set_photo(message):
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
-        src = os.getcwd() + '\\image\\' + photo_id;
+        src = os.getcwd() + '\\image\\' + photo_id
         with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
         # Получаем hash из фото
@@ -446,7 +448,7 @@ def set_photo(message):
         # Сохраняем фото
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
-        src = os.getcwd() + '\\image\\' + photo_id;
+        src = os.getcwd() + '\\image\\' + photo_id
         with open(src, 'wb') as new_file:
             new_file.write(downloaded_file)
         # Получаем hash из фото
@@ -657,6 +659,11 @@ def top_30(message):
 
 @bot.message_handler(content_types=['video'])
 def set_viseo(message):
+    if message.caption:
+        if 'nomem' in message.caption.lower():
+            return
+        if 'флюгегехаймен' in message.caption.lower():
+            return
     video_id = message.video.file_id
     if message.chat.id == -532856839:
         bot.send_message(message.chat.id, video_id)
