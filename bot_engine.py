@@ -387,10 +387,17 @@ def set_photo(message):
         if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
             bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
         else:
+            db_worker = SQLighter(config.database_name)
             if hash_images in rows:
+                users = db_worker.get_users_from_chat(message)
+                debt_users = []
+                for user in users:
+                    ou = db_worker.check_mem_chat(message, user)
+                    if ou is False:
+                        debt_users.append(user)
                 bot.send_message(message.chat.id,
-                                 f"Похоже на этот мем... Но я всего лишь безмозглая машина @Istinx проверь ты.")
-                db_worker = SQLighter(config.database_name)
+                                 f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
+                                 f"поскольку ты должен мем проверь на баян.")
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                 db_worker.close()
 
@@ -467,10 +474,17 @@ def set_photo(message):
         if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
             bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
         else:
+            db_worker = SQLighter(config.database_name)
             if hash_images in rows:
+                users = db_worker.get_users_from_chat(message)
+                debt_users = []
+                for user in users:
+                    ou = db_worker.check_mem_chat(message, user)
+                    if ou is False:
+                        debt_users.append(user)
                 bot.send_message(message.chat.id,
-                                 f"Похоже на этот мем... Но я всего лишь безмозглая машина @Istinx проверь ты.")
-                db_worker = SQLighter(config.database_name)
+                                 f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
+                                 f"поскольку ты должен мем проверь на баян.")
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                 db_worker.close()
 
@@ -480,10 +494,18 @@ def set_photo(message):
 
                     count = hash_image.CompareHash(key, hash_images)
                     if count < 2:
-                        bot.send_message(message.chat.id,
-                                         f"Я сомневаюсь, но совпадение более 98%. Но я всего лишь безмозглая машина @Istinx проверь ты.")
                         db_worker = SQLighter(config.database_name)
-                        bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
+
+                        users = db_worker.get_users_from_chat(message)
+                        debt_users = []
+                        for user in users:
+                            ou = db_worker.check_mem_chat(message, user)
+                            if ou is False:
+                                debt_users.append(user)
+                        bot.send_message(message.chat.id,
+                                         f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
+                                         f"поскольку ты должен мем проверь на баян.")
+                        bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                         db_worker.close()
                         break
                 # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
