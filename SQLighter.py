@@ -212,7 +212,7 @@ class SQLighter:
         return rows
 
     def select_file_id(self, hash_images):
-
+        file_id = 'AgACAgIAAxkBAAIoZ2OJw8tf-aZSV3de9mUU3xltvyXnAAKOwjEbR8xRSI7TqTjXDyvkAQADAgADeAADKwQ'
         fetchall_file_id = self.cursor.execute(
             'SELECT file_id from hash_image where hash_images=' + '\'' + str(hash_images) + '\'').fetchall()
         for value in fetchall_file_id:
