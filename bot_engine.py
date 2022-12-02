@@ -389,13 +389,16 @@ def set_photo(message):
         else:
             db_worker = SQLighter(config.database_name)
             if hash_images in rows:
+                if message.chat.id == -532856839:
+                    message.chat.id = -1001210399850
+                    chat_id = -532856839
                 users = db_worker.get_users_from_chat(message)
                 debt_users = []
                 for user in users:
                     ou = db_worker.check_mem_chat(message, user)
                     if ou is False:
                         debt_users.append(user)
-                bot.send_message(message.chat.id,
+                bot.send_message(chat_id,
                                  f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
                                  f"поскольку ты должен мем проверь на баян.")
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
@@ -476,13 +479,17 @@ def set_photo(message):
         else:
             db_worker = SQLighter(config.database_name)
             if hash_images in rows:
+                if message.chat.id == -532856839:
+                    message.chat.id = -1001210399850
+                    chat_id = -532856839
                 users = db_worker.get_users_from_chat(message)
                 debt_users = []
                 for user in users:
                     ou = db_worker.check_mem_chat(message, user)
                     if ou is False:
                         debt_users.append(user)
-                bot.send_message(message.chat.id,
+
+                bot.send_message(chat_id,
                                  f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
                                  f"поскольку ты должен мем проверь на баян.")
                 bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
@@ -495,14 +502,17 @@ def set_photo(message):
                     count = hash_image.CompareHash(key, hash_images)
                     if count < 2:
                         db_worker = SQLighter(config.database_name)
-
+                        if message.chat.id == -532856839:
+                            message.chat.id = -1001210399850
+                            chat_id = -532856839
                         users = db_worker.get_users_from_chat(message)
                         debt_users = []
                         for user in users:
                             ou = db_worker.check_mem_chat(message, user)
                             if ou is False:
                                 debt_users.append(user)
-                        bot.send_message(message.chat.id,
+
+                        bot.send_message(chat_id,
                                          f"Похоже на этот мем... Но я всего лишь безмозглая машина @{random.choice(debt_users)} "
                                          f"поскольку ты должен мем проверь на баян.")
                         bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
@@ -1069,6 +1079,7 @@ def set_top_lion(message):
 
 @bot.message_handler(commands=['debt'])
 def set_f(message):
+    chat_id = message.chat.id
     if message.chat.id == -532856839:
         message.chat.id = -1001210399850
         chat_id = -532856839
