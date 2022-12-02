@@ -1003,7 +1003,6 @@ def load_photo(message):
 
 @bot.message_handler(commands=['f'])
 def set_f(message):
-    print(message.chat.id)
     list_photo_id = [
         'AgACAgIAAxkBAAIbeWG_wG91XsfV-dGUxCy6_RHFAAE9gAACW7QxG2waAUpXMmLDR2MLpAEAAwIAA3MAAyME',
         'AgACAgIAAxkBAAIbfWG_wLmbcDKUSkGMdfqD5ju_bB6cAAJctDEbbBoBSkhMPdxI-rnBAQADAgADcwADIwQ',
