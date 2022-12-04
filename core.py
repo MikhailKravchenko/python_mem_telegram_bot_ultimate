@@ -1027,8 +1027,6 @@ class Core(AbstractCore):
         photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
         await self.bot.send_photo(message.chat.id, photo=photo_id)
 
-
-
     @info_log_message_async
     @exception
     async def process_content_new_chat_members(self, message: telebot.types.Message) -> None:
@@ -1348,13 +1346,13 @@ class Core(AbstractCore):
         await self.bot.polling(non_stop=True, skip_pending=True, timeout=40, request_timeout=40)  # to skip updates
 
     @exception
-    def run_webhook(self) -> None:
+    async def run_webhook(self) -> None:
         """
         Running bot webhooks
         """
         with open(WEBHOOK_SSL_CERT, 'r') as ssl_cert:
-            self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-                                 certificate=ssl_cert)
+            await self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+                                       certificate=ssl_cert)
 
         # Build ssl context
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
@@ -1373,7 +1371,7 @@ app.router.add_post('/{token}/', Core().get_data)
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()
-    core.run_webhook()
+    asyncio.run(core.run_webhook())
 
 else:
     if __name__ == '__main__':
