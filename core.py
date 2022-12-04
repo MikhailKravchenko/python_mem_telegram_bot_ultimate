@@ -1027,6 +1027,8 @@ class Core(AbstractCore):
         photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
         await self.bot.send_photo(message.chat.id, photo=photo_id)
 
+
+
     @info_log_message_async
     @exception
     async def process_content_new_chat_members(self, message: telebot.types.Message) -> None:
@@ -1346,24 +1348,28 @@ class Core(AbstractCore):
         await self.bot.polling(non_stop=True, skip_pending=True, timeout=40, request_timeout=40)  # to skip updates
 
     @exception
-    async def run_webhook(self) -> None:
+    def run_webhook(self) -> None:
         """
         Running bot webhooks
         """
-        with open(WEBHOOK_SSL_CERT, 'r') as ssl_cert:
-            await self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-                                       certificate=ssl_cert)
-
-        # Build ssl context
-        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-
-        # Start aiohttp server
-        web.run_app(
-            app,
-            host=WEBHOOK_LISTEN,
-            port=WEBHOOK_PORT,
-            ssl_context=context,
+        # self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+        #                          certificate=open(WEBHOOK_SSL_CERT, 'r'))
+        #
+        # # Build ssl context
+        # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+        #
+        # # Start aiohttp server
+        # web.run_app(
+        #     app,
+        #     host=WEBHOOK_LISTEN,
+        #     port=WEBHOOK_PORT,
+        #     ssl_context=context,
+        # )
+        await self.bot.run_webhooks(
+            listen=WEBHOOK_LISTEN,
+            certificate=WEBHOOK_SSL_CERT,
+            certificate_key=WEBHOOK_SSL_PRIV
         )
 
 
@@ -1371,7 +1377,7 @@ app.router.add_post('/{token}/', Core().get_data)
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()
-    asyncio.run(core.run_webhook())
+    core.run_webhook()
 
 else:
     if __name__ == '__main__':
