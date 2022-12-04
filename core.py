@@ -1353,7 +1353,7 @@ class Core(AbstractCore):
         Running bot webhooks
         """
 
-        self.bot.remove_webhook()
+        await self.bot.remove_webhook()
 
         await self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
                                  certificate=open(WEBHOOK_SSL_CERT, 'r'))
