@@ -1348,28 +1348,26 @@ class Core(AbstractCore):
         await self.bot.polling(non_stop=True, skip_pending=True, timeout=40, request_timeout=40)  # to skip updates
 
     @exception
-    async def run_webhook(self) -> None:
+    def run_webhook(self) -> None:
         """
         Running bot webhooks
         """
-        # self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-        #                          certificate=open(WEBHOOK_SSL_CERT, 'r'))
-        #
-        # # Build ssl context
-        # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-        #
-        # # Start aiohttp server
-        # web.run_app(
-        #     app,
-        #     host=WEBHOOK_LISTEN,
-        #     port=WEBHOOK_PORT,
-        #     ssl_context=context,
-        # )
-        await self.bot.run_webhooks(
-            listen=WEBHOOK_LISTEN,
-            certificate=WEBHOOK_SSL_CERT,
-            certificate_key=WEBHOOK_SSL_PRIV
+
+        self.bot.remove_webhook()
+
+        await self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
+                                 certificate=open(WEBHOOK_SSL_CERT, 'r'))
+
+        # Build ssl context
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
+
+        # Start aiohttp server
+        web.run_app(
+            app,
+            host=WEBHOOK_LISTEN,
+            port=WEBHOOK_PORT,
+            ssl_context=context,
         )
 
 
@@ -1377,7 +1375,8 @@ app.router.add_post('/{token}/', Core().get_data)
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()
-    asyncio.run(core.run_webhook())
+    asyncio.run(
+        core.run_webhook())
 
 else:
     if __name__ == '__main__':
