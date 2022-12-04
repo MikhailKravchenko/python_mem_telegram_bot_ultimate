@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import telebot
 import env
@@ -10,7 +11,6 @@ bot = telebot.TeleBot(env.token)
 def send_to_chat(message):
     if message.text == 'стоп' or message.text == 'Стоп' or message.text == 'СТОП':
         return
-
     x = message.photo[0].file_id
     if x is None:
         return
