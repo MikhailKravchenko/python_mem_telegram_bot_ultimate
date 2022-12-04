@@ -1348,7 +1348,7 @@ class Core(AbstractCore):
         await self.bot.polling(non_stop=True, skip_pending=True, timeout=40, request_timeout=40)  # to skip updates
 
     @exception
-    def run_webhook(self) -> None:
+    async def run_webhook(self) -> None:
         """
         Running bot webhooks
         """
