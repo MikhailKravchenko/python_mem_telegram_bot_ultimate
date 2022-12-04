@@ -1377,7 +1377,7 @@ app.router.add_post('/{token}/', Core().get_data)
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()
-    core.run_webhook()
+    asyncio.run(core.run_webhook())
 
 else:
     if __name__ == '__main__':
