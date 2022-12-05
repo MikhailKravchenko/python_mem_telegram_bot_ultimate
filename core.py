@@ -390,8 +390,8 @@ class Core(AbstractCore):
         db_worker = SQLighter(config.database_name)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
-            message.chat.id == is_admin_chat[0][1]
-            chat_id = is_admin_chat[0][2]
+            message.chat.id == is_admin_chat[0][2]
+            chat_id = is_admin_chat[0][1]
             x = utils.get_id_photo_for_chat(chat_id)
             if x == None: return
             # Выбираем случайный элемент списка
