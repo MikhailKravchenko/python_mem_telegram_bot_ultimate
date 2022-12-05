@@ -340,6 +340,14 @@ class SQLighter:
             return True
         except Exception:
             return False
+    def get_admin_chat(self, message):
+        with self.connection:
+            chat_id = message.chat.id
+            x = self.cursor.execute('SELECT * FROM admin_chat WHERE admin_chat=?', (chat_id,)).fetchall()
+        return x
+
+
+
 
     def close(self):
         """ Закрываем текущее соединение с БД """

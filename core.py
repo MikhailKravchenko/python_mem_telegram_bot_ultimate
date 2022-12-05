@@ -387,10 +387,12 @@ class Core(AbstractCore):
     async def process_get_mem(self, message: telebot.types.Message) -> None:
         """
         """
-        if message.chat.id == -532856839:
-            chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            message.chat.id == is_admin_chat[0][1]
+            chat_id = is_admin_chat[0][2]
             x = utils.get_id_photo_for_chat(chat_id)
-
             if x == None: return
             # Выбираем случайный элемент списка
             photo_id = x[random.randrange(0, len(x), 1)]
@@ -1298,6 +1300,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_get_text_messages(self, message: telebot.types.Message) -> None:
+
         m = str(message).replace("'", '"').replace('False', '"False"').replace('True', '"True"').replace('null',
                                                                                                          '"null"').replace(
             'None', '"None"')
