@@ -31,7 +31,7 @@ from env import (
     WEBHOOK_URL_BASE,
     WEBHOOK_URL_PATH,
     token,
-    webhook,
+    webhook, WEBHOOK_HOST,
 )
 from SQLighter import SQLighter
 
