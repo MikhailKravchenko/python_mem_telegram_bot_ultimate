@@ -1348,7 +1348,7 @@ class Core(AbstractCore):
         await self.bot.polling(non_stop=True, skip_pending=True, timeout=40, request_timeout=40)  # to skip updates
 
     @exception
-    def run_webhook(self) -> None:
+    async def run_webhook(self) -> None:
         """
         Running bot webhooks
         """
@@ -1368,7 +1368,7 @@ class Core(AbstractCore):
         #     port=WEBHOOK_PORT,
         #     ssl_context=context,
         # )
-        self.bot.run_webhooks(
+        await self.bot.run_webhooks(
             listen=WEBHOOK_LISTEN,
             certificate=WEBHOOK_SSL_CERT,
             certificate_key=WEBHOOK_SSL_PRIV
@@ -1378,8 +1378,8 @@ app.router.add_post('/{token}/', Core().get_data)
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()
-
-    core.run_webhook()
+    asyncio.run(
+        core.run_webhook())
 
 else:
     if __name__ == '__main__':
