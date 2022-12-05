@@ -1319,22 +1319,23 @@ class Core(AbstractCore):
 
             await self.bot.send_photo(message.chat.id, photo=photo_id)
 
-    # @info_log_message_async
-    # @exception
-    # async def get_data(self, request: object) -> web.Response:
-    #     """
-    #
-    #     :param request:
-    #     :return:
-    #     Updates information about new messages for the bot
-    #     """
-    #     if request.match_info.get('token') == self.bot.token:
-    #         request_body_dict = await request.json()
-    #         update = telebot.types.Update.de_json(request_body_dict)
-    #         await self.bot.process_new_updates([update])
-    #         return web.Response()
-    #     else:
-    #         return web.Response(status=403)
+    @info_log_message_async
+    @exception
+    async def get_data(self, request: object) -> web.Response:
+        """
+
+        :param request:
+        :return:
+        Updates information about new messages for the bot
+        """
+        pass
+        # if request.match_info.get('token') == self.bot.token:
+        #     request_body_dict = await request.json()
+        #     update = telebot.types.Update.de_json(request_body_dict)
+        #     await self.bot.process_new_updates([update])
+        #     return web.Response()
+        # else:
+        #     return web.Response(status=403)
 
     @exception
     async def run(self) -> None:
