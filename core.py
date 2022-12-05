@@ -371,13 +371,13 @@ class Core(AbstractCore):
         """
         Designates the current chat as the admin chat if it is not assigned
         """
-        db_worker = PostgreSQL()
+        db_worker = SQLighter(config.database_name)
 
         if db_worker.set_admin_chat_in_db(message):
 
             await self.bot.send_message(message.chat.id,
                                         'Now this chat is admin, all admin commands are available \n'
-                                        'To list commands /admin')
+                                        )
         else:
             await self.bot.send_message(message.chat.id,
                                         'This bot already has an admin chat assigned')
@@ -1027,8 +1027,6 @@ class Core(AbstractCore):
         photo_id = list_photo_id[random.randrange(0, len(list_photo_id), 1)]
         await self.bot.send_photo(message.chat.id, photo=photo_id)
 
-
-
     @info_log_message_async
     @exception
     async def process_content_new_chat_members(self, message: telebot.types.Message) -> None:
@@ -1329,13 +1327,6 @@ class Core(AbstractCore):
         Updates information about new messages for the bot
         """
         pass
-        # if request.match_info.get('token') == self.bot.token:
-        #     request_body_dict = await request.json()
-        #     update = telebot.types.Update.de_json(request_body_dict)
-        #     await self.bot.process_new_updates([update])
-        #     return web.Response()
-        # else:
-        #     return web.Response(status=403)
 
     @exception
     async def run(self) -> None:
@@ -1354,30 +1345,15 @@ class Core(AbstractCore):
         Running bot webhooks
         """
 
-
-        # self.bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH,
-        #                          certificate=open(WEBHOOK_SSL_CERT, 'r'))
-        #
-        # # Build ssl context
-        # context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        # context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
-        #
-        # # Start aiohttp server
-        # web.run_app(
-        #     app,
-        #     host=WEBHOOK_LISTEN,
-        #     port=WEBHOOK_PORT,
-        #     ssl_context=context,
-        # )
         await self.bot.run_webhooks(
             listen=WEBHOOK_HOST,
             port=WEBHOOK_PORT,
-            url_path= WEBHOOK_URL_PATH,
+            url_path=WEBHOOK_URL_PATH,
             certificate=WEBHOOK_SSL_CERT,
             certificate_key=WEBHOOK_SSL_PRIV
-            )
+        )
 
-# app.router.add_post('/{token}/', Core().get_data)
+
 # Depending on the settings, select the type of connection
 if webhook is True:
     core = Core()

@@ -329,8 +329,17 @@ class SQLighter:
 
 
         return bool(users)
-
-
+    def set_admin_chat_in_db(self, message):
+        try:
+            with self.connection:
+                chat_id = message.chat.id
+                admin_chat = message.text[14:]
+                self.cursor.execute(
+                    'INSERT INTO admin_chat (chat_id, admin_chat) VALUES (''\'' + str(chat_id) + '\',\'' + str(
+                        admin_chat) + '\''')')
+            return True
+        except Exception:
+            return False
 
     def close(self):
         """ Закрываем текущее соединение с БД """
