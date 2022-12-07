@@ -1298,6 +1298,10 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_content_video(self, message: telebot.types.Message) -> None:
+        if message.from_user.username:
+            db_worker = SQLighter(config.database_name)
+            if db_worker.check_username_in_black_list(message.chat.id, message.from_user.username):
+                return
         if message.caption:
             if 'nomem' in message.caption.lower():
                 return
