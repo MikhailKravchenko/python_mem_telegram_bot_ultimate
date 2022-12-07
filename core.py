@@ -596,10 +596,10 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_top7(self, message: telebot.types.Message) -> None:
-        if message.chat.id == -1001210399850:
-            return
-        elif message.chat.id == -532856839:
-            chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
             db_worker = SQLighter(config.database_name)
             top = db_worker.ratio_rating_7days(chat_id)
             db_worker.close()
@@ -665,10 +665,10 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_top30(self, message: telebot.types.Message) -> None:
-        if message.chat.id == -1001210399850:
-            return
-        elif message.chat.id == -532856839:
-            chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
             db_worker = SQLighter(config.database_name)
             top = db_worker.ratio_rating_30days(chat_id)
             db_worker.close()
@@ -779,134 +779,139 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_tophunya7(self, message: telebot.types.Message) -> None:
-        chat_id = message.chat.id
-        mem_chat = -1001210399850
         db_worker = SQLighter(config.database_name)
-        top = db_worker.ratio_rating_3_7days(mem_chat)
-        db_worker.close()
-        i = 0
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            mem_chat = is_admin_chat[0][1]
+            chat_id = message.chat.id
+            top = db_worker.ratio_rating_3_7days(mem_chat)
+            db_worker.close()
+            i = 0
 
-        for el in top:
+            for el in top:
 
-            ratio = top[i][1]
-            photo_id = top[i][2]
-            username = top[i][3]
-            message_id = top[i][5]
-            data_id = top[i][7]
-            i = i + 1
-            if int(data_id) == 0:
-                await self.bot.send_photo(chat_id, photo=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username} ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
-            elif int(data_id) == 1:
-                await self.bot.send_video(chat_id, data=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                ratio = top[i][1]
+                photo_id = top[i][2]
+                username = top[i][3]
+                message_id = top[i][5]
+                data_id = top[i][7]
+                i = i + 1
+                if int(data_id) == 0:
+                    await self.bot.send_photo(chat_id, photo=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username} ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
+                elif int(data_id) == 1:
+                    await self.bot.send_video(chat_id, data=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех на этой неделе')
 
     @info_log_message_async
     @exception
     async def process_command_tophunya30(self, message: telebot.types.Message) -> None:
-        chat_id = message.chat.id
-        mem_chat = -1001210399850
-
         db_worker = SQLighter(config.database_name)
-        top = db_worker.ratio_rating_3_7days(mem_chat)
-        db_worker.close()
-        i = 0
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            mem_chat = is_admin_chat[0][1]
+            chat_id = message.chat.id
+            top = db_worker.ratio_rating_3_7days(mem_chat)
+            db_worker.close()
+            i = 0
 
-        for el in top:
+            for el in top:
 
-            ratio = top[i][1]
-            photo_id = top[i][2]
-            username = top[i][3]
-            message_id = top[i][5]
-            data_id = top[i][7]
-            i = i + 1
-            if int(data_id) == 0:
-                await self.bot.send_photo(chat_id, photo=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username} ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
-            elif int(data_id) == 1:
-                await self.bot.send_video(chat_id, data=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                ratio = top[i][1]
+                photo_id = top[i][2]
+                username = top[i][3]
+                message_id = top[i][5]
+                data_id = top[i][7]
+                i = i + 1
+                if int(data_id) == 0:
+                    await self.bot.send_photo(chat_id, photo=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username} ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
+                elif int(data_id) == 1:
+                    await self.bot.send_video(chat_id, data=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Место. Твой мем набрал {ratio} лайков - больше всех в этом месяце')
 
     @info_log_message_async
     @exception
     async def process_command_antitophunya(self, message: telebot.types.Message) -> None:
-        chat_id = message.chat.id
-        mem_chat = -1001210399850
         db_worker = SQLighter(config.database_name)
-        top = db_worker.anti_ratio_rating_all_time(mem_chat)
-        db_worker.close()
-        i = 0
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            mem_chat = is_admin_chat[0][1]
+            chat_id = message.chat.id
+            top = db_worker.anti_ratio_rating_all_time(mem_chat)
+            db_worker.close()
+            i = 0
 
-        for el in top:
+            for el in top:
 
-            ratio = top[i][6]
-            photo_id = top[i][2]
-            username = top[i][3]
-            message_id = top[i][5]
-            data_id = top[i][7]
-            i = i + 1
-            if int(data_id) == 0:
-                await self.bot.send_photo(chat_id, photo=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username} ' + str(
-                                                    i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
-            elif int(data_id) == 1:
-                await self.bot.send_video(chat_id, data=photo_id)
-                try:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
-                                                reply_to_message_id=message_id)
-                except:
-                    await self.bot.send_message(chat_id,
-                                                f' @{username}  ' + str(
-                                                    i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+                ratio = top[i][6]
+                photo_id = top[i][2]
+                username = top[i][3]
+                message_id = top[i][5]
+                data_id = top[i][7]
+                i = i + 1
+                if int(data_id) == 0:
+                    await self.bot.send_photo(chat_id, photo=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username} ' + str(
+                                                        i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
+                elif int(data_id) == 1:
+                    await self.bot.send_video(chat_id, data=photo_id)
+                    try:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!',
+                                                    reply_to_message_id=message_id)
+                    except:
+                        await self.bot.send_message(chat_id,
+                                                    f' @{username}  ' + str(
+                                                        i) + f' Ты набрал больше всего дизлайков {ratio}. Ну и душнила!')
 
     @info_log_message_async
     @exception
     async def process_command_toplionhunya(self, message: telebot.types.Message) -> None:
-        if message.chat.id == -532856839:
-            message.chat.id = -1001210399850
-            chat_id = -532856839
         db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
         users = db_worker.top_lion_get_users(message)
         top_lion_list = []
         for user in users:
@@ -953,9 +958,9 @@ class Core(AbstractCore):
                f'\n' \
                f'/antitophunya посмотреть топы дизлайков\n' \
                f'\n' \
-               f'/load узнать photo_id\n' \
+               f'load_photo_in_db узнать photo_id\n' \
                f'\n' \
-               f'/send_to_chat отправить фото в чат мемов (для отмены сообщение "стоп")\n' \
+               f'send_to_chat прикрепить этот текст к изображению и отправить фото в чат мемов (пишем желаемый текст после  текст)\n' \
                f'\n' \
                f'/toplionhunya - все самолайки' \
                f'\n' \
@@ -967,10 +972,11 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_debt(self, message: telebot.types.Message) -> telebot.types.Message:
-        chat_id = message.chat.id
-        if message.chat.id == -532856839:
-            message.chat.id = -1001210399850
-            chat_id = -532856839
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][2]
+            message.chat.id = is_admin_chat[0][1]
         db_worker = SQLighter(config.database_name)
         users = db_worker.get_users_from_chat(message)
         debt_users = []
@@ -991,15 +997,13 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_message(self, message: telebot.types.Message) -> None:
-        if message.chat.id == -532856839:
-            # Отсылаем в чат
-            message.chat.id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
             text = message.text[9:]
             await self.bot.send_message(message.chat.id, text)
-        else:
-            text = message.text[9:]
 
-            await self.bot.send_message(message.chat.id, text)
 
     @info_log_message_async
     @exception
@@ -1085,10 +1089,15 @@ class Core(AbstractCore):
                 x = message.photo[0].file_id
                 if x is None:
                     return
-                chat_id = -1001210399850
-                await self.bot.send_photo(chat_id, x)
+                db_worker = SQLighter(config.database_name)
+                is_admin_chat = db_worker.get_admin_chat(message)
+                if is_admin_chat:
+                    chat_id = is_admin_chat[0][1]
+                text = str(message.caption.lower()).replace("send_to_chat", "")
+
+                await self.bot.send_photo(chat_id, x, caption=text)
                 return
-            if 'load' in message.caption.lower():
+            if 'load_photo_in_db' in message.caption.lower():
                 x = message.photo[0].file_id
                 await self.bot.send_message(message.chat.id, x)
                 return
