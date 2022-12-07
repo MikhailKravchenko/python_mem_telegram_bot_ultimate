@@ -4,14 +4,20 @@ import logging
 import time
 from datetime import datetime
 from typing import Any, Callable, Dict, Tuple
-
+from pythonjsonlogger import jsonlogger
+import logging.config
 
 def create_logger() -> object:
     """
     Create a logger and return it
     """
-    logger = logging.getLogger("example_logger")
-    logger.setLevel(logging.INFO)
+
+    logger = logging.getLogger(__name__)
+    logHandler = logging.StreamHandler()
+    formatter = jsonlogger.JsonFormatter()
+    logHandler.setFormatter(formatter)
+    logger.addHandler(logHandler)
+    logging.config.fileConfig('logging-json.ini', disable_existing_loggers=False)
 
     # Файл для логов
     fh = logging.FileHandler("./logs/pythom_mem_telegram_bot_ultimate.log")
@@ -20,7 +26,6 @@ def create_logger() -> object:
     formatter = logging.Formatter(format_message)
     fh.setFormatter(formatter)
 
-    logger.addHandler(fh)
     return logger
 
 
