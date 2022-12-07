@@ -345,9 +345,20 @@ class SQLighter:
             chat_id = message.chat.id
             x = self.cursor.execute('SELECT * FROM admin_chat WHERE admin_chat=?', (chat_id,)).fetchall()
         return x
+    def set_user_in_black_list(self, chat_id_memem_chat, text):
+        try:
+            with self.connection:
+                self.cursor.execute(
+                    'INSERT INTO black_list (chat_id, username) VALUES (''\'' + str(chat_id_memem_chat) + '\',\'' + str(
+                        text) + '\''')')
+            return True
+        except Exception:
+            return False
 
-
-
+    def check_username_in_black_list(self, chat_id, username):
+        with self.connection:
+            x = self.cursor.execute('SELECT username FROM black_list WHERE chat_id=? AND username=?', (chat_id, username)).fetchall()
+        return bool(x)
 
     def close(self):
         """ Закрываем текущее соединение с БД """

@@ -52,6 +52,12 @@ class Core(AbstractCore):
             """Fires when a command is entered /start"""
             await self.process_comand_start(message)
 
+        @self.bot.message_handler(commands=['black_list'])
+        @exception
+        async def _command_black_list(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
+            """Fires when a command is entered /black_list"""
+            await self.process_comand_black_list(message)
+
         @self.bot.message_handler(commands=['admin'])
         @exception
         async def _command_admin(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
@@ -338,6 +344,18 @@ class Core(AbstractCore):
                                     ' If there is a repeat, I will let you know. For each meme (photo and video), '
                                     'I send voting buttons. In the admin chat you can see the top for the week, '
                                     'month and year. And display messages in the main chat.')
+
+    @info_log_message_async
+    @exception
+    async def process_comand_black_list(self, message: telebot.types.Message) -> None:
+        """/black_list
+            """
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id_meme_chat = is_admin_chat[0][1]
+        text = message.text[11:].replace("@", "").replace(" ", "")
+        db_worker.set_user_in_black_list(chat_id_meme_chat, text)
 
     @info_log_message_async
     @exception
@@ -1004,7 +1022,6 @@ class Core(AbstractCore):
             text = message.text[9:]
             await self.bot.send_message(message.chat.id, text)
 
-
     @info_log_message_async
     @exception
     async def process_command_f(self, message: telebot.types.Message) -> None:
@@ -1105,6 +1122,11 @@ class Core(AbstractCore):
                 return
             if 'флюгегехаймен' in message.caption.lower():
                 return
+        if message.from_user.username:
+            db_worker = SQLighter(config.database_name)
+            if db_worker.check_username_in_black_list(message.chat.id, message.from_user.username):
+                return
+
         if message.chat.id == -532856839:
             chat_id = -1001210399850
             photo_id = message.photo[-1].file_id
