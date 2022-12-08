@@ -334,7 +334,7 @@ class Core(AbstractCore):
 
     @info_log_message_async
     @exception
-    async def process_comand_start(self, message: telebot.types.Message) -> None:
+    async def process_command_start(self, message: telebot.types.Message) -> None:
         """/start command method
              Sends a welcome message
             """
@@ -347,7 +347,7 @@ class Core(AbstractCore):
 
     @info_log_message_async
     @exception
-    async def process_comand_black_list(self, message: telebot.types.Message) -> None:
+    async def process_command_black_list(self, message: telebot.types.Message) -> None:
         """/black_list
             """
         db_worker = SQLighter(config.database_name)
@@ -359,7 +359,7 @@ class Core(AbstractCore):
 
     @info_log_message_async
     @exception
-    async def process_comand_admin(self, message: telebot.types.Message) -> None:
+    async def process_command_admin(self, message: telebot.types.Message) -> None:
         """
 
         :param message: telebot.types.Message
@@ -371,17 +371,8 @@ class Core(AbstractCore):
 
 
         """
-        db_worker = PostgreSQL()
-        admin_chat_id = db_worker.get_admin_chat_id()
-        if not admin_chat_id:
-            await self.bot.send_message(message.chat.id, "There is no admin chat yet.\n"
-                                                         "To make this chat the bot admin's chat,"
-                                                         " enter command /setadminchat")
-            return
-        if admin_chat_id[0][0] == message.chat.id:
-            await self.bot.send_message(message.chat.id,
-                                        '/statistic - Get bot statistics \n'
-                                        )
+        await self.bot.send_message(message.chat.id, "Nice try")
+
 
     @info_log_message_async
     @exception
@@ -1127,11 +1118,12 @@ class Core(AbstractCore):
             if db_worker.check_username_in_black_list(message.chat.id, message.from_user.username):
                 return
 
-        if message.chat.id == -532856839:
-            chat_id = -1001210399850
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
             photo_id = message.photo[-1].file_id
-            if message.chat.id == -532856839:
-                await self.bot.send_message(message.chat.id, photo_id)
+            await self.bot.send_message(message.chat.id, photo_id)
             #     like
 
             # Сохраняем фото
@@ -1147,7 +1139,6 @@ class Core(AbstractCore):
                 os.remove(src)
 
             # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
-            db_worker = SQLighter(config.database_name)
             # запись информации о меме в бд
             rows = db_worker.select_hash_images(chat_id)
             db_worker.close()
@@ -1187,10 +1178,8 @@ class Core(AbstractCore):
         else:
 
             # достаем id изображения
-
             photo_id = message.photo[-1].file_id
             #     like
-
             user_id = message.from_user.username
             if user_id is None:
                 user_id = servises.get_name(message)
@@ -1285,15 +1274,8 @@ class Core(AbstractCore):
                         answer.append(photo_id)
                         utils.set_id_photo_for_chat(message.chat.id, answer)
                     else:
-                        # chat_id memes_guild = -1001210399850
-                        if message.chat.id == -532856839:
-                            message.chat.id = -1001210399850
-                            answer = utils.get_answer_for_user(message.chat.id)
-                            answer.append(photo_id)
-                            utils.set_id_photo_for_chat(message.chat.id, answer)
-                        else:
-                            answer.append(photo_id)
-                            utils.set_id_photo_for_chat(message.chat.id, answer)
+                        answer.append(photo_id)
+                        utils.set_id_photo_for_chat(message.chat.id, answer)
 
     @info_log_message_async
     @exception
@@ -1308,7 +1290,9 @@ class Core(AbstractCore):
             if 'флюгегехаймен' in message.caption.lower():
                 return
         video_id = message.video.file_id
-        if message.chat.id == -532856839:
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
             await self.bot.send_message(message.chat.id, video_id)
         chat_id = message.chat.id
         user_id = message.from_user.username
