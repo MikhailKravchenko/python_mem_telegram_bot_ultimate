@@ -1244,7 +1244,6 @@ class Core(AbstractCore):
                                                 f"поскольку ты должен мем проверь на баян.")
                     await self.bot.send_photo(message.chat.id, photo=db_worker.select_file_id(hash_images))
                     db_worker.close()
-
                 # проверяем на 95% совпадение хэшей
                 else:
                     for key in rows:
