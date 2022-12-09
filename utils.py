@@ -15,7 +15,6 @@ def set_id_photo_for_chat(chat_id, args):
         storage[str(chat_id)] = args
 
 
-
 def get_id_photo_for_chat(chat_id):
     """
 
