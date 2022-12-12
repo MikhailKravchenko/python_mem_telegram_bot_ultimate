@@ -9,12 +9,14 @@ import sqlite3
 import ssl
 import urllib
 from datetime import datetime
+from typing import Any, Union
 
 import requests
 import telebot
 from aiohttp import web
 from telebot import types
 from telebot.async_telebot import AsyncTeleBot
+from telebot.types import InputMedia
 
 import hash_image
 import servises
@@ -75,9 +77,16 @@ class Core(AbstractCore):
         @self.bot.message_handler(commands=['mem'])
         @exception
         async def _command_mem(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
-            """Fires when a command is entered /statistic"""
+            """Fires when a command is entered /mem"""
 
             await self.process_get_mem(message)
+
+        @self.bot.message_handler(commands=['content_control'])
+        @exception
+        async def _command_mem(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
+            """Fires when a command is entered /content_control"""
+
+            await self.process_get_content_control(message)
 
         @self.bot.message_handler(commands=['wednesday'])
         @exception
@@ -331,6 +340,14 @@ class Core(AbstractCore):
                     # bot.answer_callback_query(c.message.chat.id, 'Конфиг пуст', reply_markup=markup)
             if data == 'get_groshi':
                 await self.bot.answer_callback_query(c.id, text='Грошi высланы на счет')
+            if 'content_control_delete_' in c.data:
+                nums = re.findall(r'\d+', data)
+                await self.delete_content_control(c.message, nums, c)
+                await self.bot.answer_callback_query(c.id, text='Delete')
+            if 'content_control_next' in c.data:
+                await self.next_content_control(c.message, c)
+
+                await self.bot.answer_callback_query(c.id, text='next')
 
     @info_log_message_async
     @exception
@@ -373,7 +390,6 @@ class Core(AbstractCore):
         """
         await self.bot.send_message(message.chat.id, "Nice try")
 
-
     @info_log_message_async
     @exception
     async def process_set_admin_chat(self, message: telebot.types.Message) -> None:
@@ -415,6 +431,92 @@ class Core(AbstractCore):
             photo_id = x[random.randrange(0, len(x), 1)]
             # Отсылаем в чат
             await self.bot.send_photo(message.chat.id, photo=photo_id)
+
+    @info_log_message_async
+    @exception
+    async def process_get_content_control(self, message: telebot.types.Message) -> None:
+        """
+        """
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
+            x = db_worker.select_file_id_for_content_control(chat_id)
+            if not x:
+                await self.bot.send_message(message.chat.id, text='There are no images in the database')
+                return
+            photo_id = x[0][1]
+
+            markup = types.InlineKeyboardMarkup(row_width=2)
+            bt1 = types.InlineKeyboardButton('Delete', callback_data='content_control_delete_' + str(x[0][0]))
+            bt2 = types.InlineKeyboardButton('Next', callback_data='content_control_next')
+            markup.add(bt1, bt2)
+
+            try:
+                await self.bot.send_photo(message.chat.id,
+                                          photo=photo_id,
+                                          reply_markup=markup)
+            except Exception as e:
+
+                await self.bot.send_message(message.chat.id, e)
+
+    @info_log_message_async
+    @exception
+    async def delete_content_control(self, message: telebot.types.Message, uniq_id: str, c: telebot.types.CallbackQuery ) -> None:
+        """
+        """
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
+            db_worker.delete_file_id_for_content_control(uniq_id[0])
+
+            x = db_worker.select_file_id_for_content_control(chat_id)
+
+            if not x:
+                await self.bot.answer_callback_query(c.id, text='There are no images in the database')
+                return
+            photo_id = types.InputMediaPhoto(x[0][1])
+
+            markup = types.InlineKeyboardMarkup(row_width=2)
+            bt1 = types.InlineKeyboardButton('Delete', callback_data='content_control_delete_' + str(x[0][0]))
+            bt2 = types.InlineKeyboardButton('Next', callback_data='content_control_next')
+            markup.add(bt1, bt2)
+            try:
+                await self.bot.edit_message_media(media=photo_id, chat_id=message.chat.id,
+                                                  message_id=message.message_id,
+                                                  reply_markup=markup)
+            except Exception as e:
+
+                await self.bot.send_message(message.chat.id, e)
+
+    @info_log_message_async
+    @exception
+    async def next_content_control(self, message: telebot.types.Message, c: telebot.types.CallbackQuery ) -> None:
+        """
+        """
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            chat_id = is_admin_chat[0][1]
+            x = db_worker.select_file_id_for_content_control(chat_id)
+
+            if not x:
+                await self.bot.answer_callback_query(c.id, text='There are no images in the database')
+                return
+            photo_id = types.InputMediaPhoto(x[0][1])
+
+            markup = types.InlineKeyboardMarkup(row_width=2)
+            bt1 = types.InlineKeyboardButton('Delete', callback_data='content_control_delete_' + str(x[0][0]))
+            bt2 = types.InlineKeyboardButton('Next', callback_data='content_control_next' + str('ratio_id'))
+            markup.add(bt1, bt2)
+            try:
+                await self.bot.edit_message_media(media=photo_id, chat_id=message.chat.id,
+                                                  message_id=message.message_id,
+                                                  reply_markup=markup)
+            except Exception as e:
+
+                await self.bot.send_message(message.chat.id, e)
 
     @info_log_message_async
     @exception

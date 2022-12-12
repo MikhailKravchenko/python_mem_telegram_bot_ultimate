@@ -252,7 +252,7 @@ class SQLighter:
                 user_name = message.from_user.first_name
                 username = "[" + user_name + "](tg://user?id=" + str(user_id_id) + ")"
 
-            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?' ,
+            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?',
                                     (user_id, chat_id)).fetchall()
 
             if x:
@@ -260,9 +260,9 @@ class SQLighter:
 
             else:
                 self.cursor.execute(
-                'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
-                    user_id) + '\',\'' + str(
-                    chat_id) + '\',\'' + str(username) + '\')')
+                    'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
+                        user_id) + '\',\'' + str(
+                        chat_id) + '\',\'' + str(username) + '\')')
 
     def save_id_chat_callback(self, c):
         with self.connection:
@@ -274,7 +274,7 @@ class SQLighter:
                 user_name = c.from_user.first_name
                 username = "[" + user_name + "](tg://user?id=" + str(user_id_id) + ")"
 
-            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?' ,
+            x = self.cursor.execute('SELECT * FROM user WHERE user_id=? AND chat_id=?',
                                     (user_id, chat_id)).fetchall()
 
             if x:
@@ -282,16 +282,15 @@ class SQLighter:
 
             else:
                 self.cursor.execute(
-                'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
-                    user_id) + '\',\'' + str(
-                    chat_id) + '\',\'' + str(username) + '\')')
-
+                    'INSERT INTO user (user_id, chat_id, username) VALUES (\'' + str(
+                        user_id) + '\',\'' + str(
+                        chat_id) + '\',\'' + str(username) + '\')')
 
     def top_lion_get_users(self, message):
         with self.connection:
             chat_id = message.chat.id
 
-            x = self.cursor.execute('SELECT DISTINCT user_id FROM ratio WHERE chat_id=?',(chat_id,)).fetchall()
+            x = self.cursor.execute('SELECT DISTINCT user_id FROM ratio WHERE chat_id=?', (chat_id,)).fetchall()
         users = []
         for item in x:
             for y in item:
@@ -301,14 +300,16 @@ class SQLighter:
     def top_lion_ratio(self, user):
         with self.connection:
 
-            x = self.cursor.execute('SELECT ratio_like_id FROM ratio_like WHERE user_id = ? AND ratio_id in (SELECT ratio_id FROM ratio WHERE user_id=?)',(user,user)).fetchall()
+            x = self.cursor.execute(
+                'SELECT ratio_like_id FROM ratio_like WHERE user_id = ? AND ratio_id in (SELECT ratio_id FROM ratio WHERE user_id=?)',
+                (user, user)).fetchall()
         users = []
         for item in x:
             for y in item:
                 users.append(y)
         return users
 
-    def get_users_from_chat(self,message):
+    def get_users_from_chat(self, message):
         with self.connection:
             chat_id = message.chat.id
             x = self.cursor.execute('SELECT username FROM user WHERE chat_id=?', (chat_id,)).fetchall()
@@ -318,7 +319,7 @@ class SQLighter:
                 users.append(y)
         return users
 
-    def check_mem_chat(self,message, user):
+    def check_mem_chat(self, message, user):
         with self.connection:
             chat_id = message.chat.id
             x = self.cursor.execute('SELECT DISTINCT user_id FROM ratio WHERE user_id=?', (user,)).fetchall()
@@ -327,8 +328,8 @@ class SQLighter:
             for y in item:
                 users.append(y)
 
-
         return bool(users)
+
     def set_admin_chat_in_db(self, message):
         try:
             with self.connection:
@@ -340,11 +341,13 @@ class SQLighter:
             return True
         except Exception:
             return False
+
     def get_admin_chat(self, message):
         with self.connection:
             chat_id = message.chat.id
             x = self.cursor.execute('SELECT * FROM admin_chat WHERE admin_chat=?', (chat_id,)).fetchall()
         return x
+
     def set_user_in_black_list(self, chat_id_memem_chat, text):
         try:
             with self.connection:
@@ -357,9 +360,23 @@ class SQLighter:
 
     def check_username_in_black_list(self, chat_id, username):
         with self.connection:
-            x = self.cursor.execute('SELECT username FROM black_list WHERE chat_id=? AND username=?', (chat_id, username)).fetchall()
+            x = self.cursor.execute('SELECT username FROM black_list WHERE chat_id=? AND username=?',
+                                    (chat_id, username)).fetchall()
         return bool(x)
 
+    def select_file_id_for_content_control(self, chat_id):
+        with self.connection:
+
+            fetchall_file_id = self.cursor.execute(
+                'SELECT id, file_id FROM hash_image WHERE chat_id =' + str(chat_id) + ' ORDER BY RANDOM() LIMIT 1').fetchall()
+        return fetchall_file_id
+
+    def delete_file_id_for_content_control(self, uniq_id):
+        with self.connection:
+            self.cursor.execute(
+            'DELETE from hash_image WHERE id='+ '\'' + str(uniq_id) + '\' ')
+
+        return True
     def close(self):
         """ Закрываем текущее соединение с БД """
         self.connection.close()
