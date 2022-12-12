@@ -52,20 +52,20 @@ class Core(AbstractCore):
         @exception
         async def _command_start(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
             """Fires when a command is entered /start"""
-            await self.process_comand_start(message)
+            await self.process_command_start(message)
 
         @self.bot.message_handler(commands=['black_list'])
         @exception
         async def _command_black_list(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
             """Fires when a command is entered /black_list"""
-            await self.process_comand_black_list(message)
+            await self.process_command_black_list(message)
 
         @self.bot.message_handler(commands=['admin'])
         @exception
         async def _command_admin(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
             """Fires when a command is entered /admin"""
 
-            await self.process_comand_admin(message)
+            await self.process_command_admin(message)
 
         @self.bot.message_handler(commands=['setadminchat'])
         @exception
