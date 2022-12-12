@@ -461,7 +461,8 @@ class Core(AbstractCore):
 
     @info_log_message_async
     @exception
-    async def delete_content_control(self, message: telebot.types.Message, uniq_id: str, c: telebot.types.CallbackQuery ) -> None:
+    async def delete_content_control(self, message: telebot.types.Message, uniq_id: str,
+                                     c: telebot.types.CallbackQuery) -> None:
         """
         """
         db_worker = SQLighter(config.database_name)
@@ -491,7 +492,7 @@ class Core(AbstractCore):
 
     @info_log_message_async
     @exception
-    async def next_content_control(self, message: telebot.types.Message, c: telebot.types.CallbackQuery ) -> None:
+    async def next_content_control(self, message: telebot.types.Message, c: telebot.types.CallbackQuery) -> None:
         """
         """
         db_worker = SQLighter(config.database_name)
