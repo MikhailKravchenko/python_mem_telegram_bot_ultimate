@@ -1,0 +1,17 @@
+services:
+  mem_bot:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8443:8443
+    volumes:
+      - ./pythom_mem_telegram_bot_ultimate/:/code/pythom_mem_telegram_bot_ultimate/
+      - ./logs:/code/logs/
+    restart: unless-stopped
+    networks:
+      cybercrew_backend_net:
+    container_name: pythom_mem_telegram_bot_ultimate
+
+networks:
+  cybercrew_backend_net:

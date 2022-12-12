@@ -17,10 +17,10 @@ def create_logger() -> object:
     formatter = jsonlogger.JsonFormatter()
     logHandler.setFormatter(formatter)
     logger.addHandler(logHandler)
-    logging.config.fileConfig('logging-json.ini', disable_existing_loggers=False)
+    logging.config.fileConfig('/code/src/logging-json.ini', disable_existing_loggers=False)
 
     # Файл для логов
-    fh = logging.FileHandler("./logs/pythom_mem_telegram_bot_ultimate.log")
+    fh = logging.FileHandler("/code/src/logs/pythom_mem_telegram_bot_ultimate.log")
 
     format_message: str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(format_message)
