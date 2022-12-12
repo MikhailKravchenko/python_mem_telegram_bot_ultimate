@@ -85,7 +85,6 @@ class Core(AbstractCore):
         @exception
         async def _command_mem(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
             """Fires when a command is entered /content_control"""
-
             await self.process_get_content_control(message)
 
         @self.bot.message_handler(commands=['wednesday'])
