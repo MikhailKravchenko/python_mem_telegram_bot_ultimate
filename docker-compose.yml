@@ -6,8 +6,9 @@ services:
     ports:
       - 8443:8443
     volumes:
-      - ./pythom_mem_telegram_bot_ultimate/:/code/pythom_mem_telegram_bot_ultimate/
-      - ./logs:/code/logs/
+      - ./src/:/code/src/
+      - ./src/logs:/code/src/logs/
+      - /home/lukas/cert/:/cert/
     restart: unless-stopped
     networks:
       cybercrew_backend_net:
