@@ -1189,6 +1189,7 @@ class Core(AbstractCore):
                                         f"Добро пожаловать, {user_name}! К сожалению, ваше заявление на отсрочку от мобилизации не будет принято, пока вы не пришлете мем в этот чат.")
 
 
+
     @info_log_message_async
     @exception
     async def process_content_photo(self, message: telebot.types.Message) -> None:
