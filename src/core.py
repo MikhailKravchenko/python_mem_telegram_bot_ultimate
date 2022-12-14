@@ -1160,7 +1160,7 @@ class Core(AbstractCore):
             None
         db_worker.close()
         # достаем имя пользователя
-        user_name = message.new_chat_member.first_name
+        user_name = message.new_chat_members[0].first_name
         # выбираем рандомно одно из приветствий и отправляем в чат
         random_answer = random.randrange(0, 6, 1)
         if random_answer == 0:
