@@ -20,7 +20,7 @@ def create_logger() -> object:
     logging.config.fileConfig('/code/src/logging-json.ini', disable_existing_loggers=False)
 
     # Файл для логов
-    fh = logging.FileHandler("/code/src/logs/pythom_mem_telegram_bot_ultimate.log")
+    fh = logging.FileHandler("/code/src/logs/python_mem_telegram_bot_ultimate.log")
 
     format_message: str = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     formatter = logging.Formatter(format_message)
