@@ -149,7 +149,6 @@ class SQLighter:
 
         return ratio_value
 
-
     def ratio_rating_all_time(self, chat_id):
 
         with self.connection:
