@@ -11,8 +11,9 @@ RUN pip install --upgrade pip
 COPY requirements.txt /code/requirements.txt
 RUN pip install -r requirements.txt
 
-EXPOSE 8443
+EXPOSE 443
 
 COPY . /code/
+#CMD ["tail", "-f", "/dev/null"]
 
 CMD ["python", "/code/src/core.py"]

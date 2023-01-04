@@ -1112,7 +1112,7 @@ class Core(AbstractCore):
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
             text = message.text[9:]
-            await self.bot.send_message(message.chat.id, text)
+            await self.bot.send_message(chat_id, text)
 
     @info_log_message_async
     @exception
@@ -1482,7 +1482,7 @@ class Core(AbstractCore):
             url_path=WEBHOOK_URL_PATH,
             certificate=WEBHOOK_SSL_CERT,
             certificate_key=WEBHOOK_SSL_PRIV
-        )
+            )
 
 
 # Depending on the settings, select the type of connection

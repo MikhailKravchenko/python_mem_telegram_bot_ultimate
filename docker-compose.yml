@@ -1,18 +1,16 @@
 services:
   mem_bot:
+    network_mode: host
     build:
       context: .
       dockerfile: ./Dockerfile
-    ports:
-      - 8443:8443
     volumes:
       - ./src/:/code/src/
       - ./src/logs:/code/src/logs/
       - /home/lukas/cert/:/cert/
+      - /usr/local/lib/python3.8/dist-packages/telebot/ext/aio/:/usr/local/lib/python3.8/site-packages/telebot/ext/aio/
     restart: unless-stopped
-    networks:
-      cybercrew_backend_net:
-    container_name: pythom_mem_telegram_bot_ultimate
 
-networks:
-  cybercrew_backend_net:
+    container_name: python_mem_telegram_bot_ultimate
+
+
