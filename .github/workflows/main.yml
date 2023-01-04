@@ -38,5 +38,5 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
           script: |
             cd /home/lukas/testproject/python_mem_telegram_bot_ultimate/
-            sudo git pull origin develop
+            sudo git pull origin main
             sudo docker-compose restart
