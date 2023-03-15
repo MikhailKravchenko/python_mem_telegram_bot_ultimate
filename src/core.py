@@ -413,10 +413,8 @@ class Core(AbstractCore):
         """
         """
         db_worker = SQLighter(config.database_name)
-        is_admin_chat = db_worker.get_admin_chat(message)
 
-        chat_id = is_admin_chat[0][1]
-        x = db_worker.select_file_id_for_content_control(chat_id)
+        x = db_worker.select_file_id_for_content_control(message.chat.id)
         if not x:
             await self.bot.send_message(message.chat.id, text='There are no images in the database')
             return
