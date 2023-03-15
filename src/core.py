@@ -80,7 +80,12 @@ class Core(AbstractCore):
             """Fires when a command is entered /mem"""
 
             await self.process_get_mem(message)
+        @self.bot.message_handler(commands=['/memchat'])
+        @exception
+        async def _command_mem_chat(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
+            """Fires when a command is entered /mem"""
 
+            await self.process_send_mem_to_chat(message)
         @self.bot.message_handler(commands=['content_control'])
         @exception
         async def _command_mem(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
@@ -406,6 +411,31 @@ class Core(AbstractCore):
         else:
             await self.bot.send_message(message.chat.id,
                                         'This bot already has an admin chat assigned')
+
+    @info_log_message_async
+    @exception
+    async def process_send_mem_to_chat(self, message: telebot.types.Message) -> None:
+        """
+        """
+        db_worker = SQLighter(config.database_name)
+        is_admin_chat = db_worker.get_admin_chat(message)
+        if is_admin_chat:
+            message.chat.id == is_admin_chat[0][2]
+            chat_id = is_admin_chat[0][1]
+            x = utils.get_id_photo_for_chat(chat_id)
+            if x == None: return
+            # Выбираем случайный элемент списка
+            photo_id = x[random.randrange(0, len(x), 1)]
+            # Отсылаем в чат
+            await self.bot.send_photo(chat_id, photo=photo_id)
+        else:
+            x = utils.get_id_photo_for_chat(message.chat.id)
+
+            if x == None: return
+            # Выбираем случайный элемент списка
+            photo_id = x[random.randrange(0, len(x), 1)]
+            # Отсылаем в чат
+            await self.bot.send_photo(message.chat.id, photo=photo_id)
 
     @info_log_message_async
     @exception
