@@ -80,7 +80,7 @@ class Core(AbstractCore):
             """Fires when a command is entered /mem"""
 
             await self.process_get_mem(message)
-        @self.bot.message_handler(commands=['/memchat'])
+        @self.bot.message_handler(commands=['memchat'])
         @exception
         async def _command_mem_chat(message: telebot.types.Message or telebot.types.CallbackQuery) -> None:
             """Fires when a command is entered /mem"""
