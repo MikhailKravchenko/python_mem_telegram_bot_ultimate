@@ -345,9 +345,10 @@ class Core(AbstractCore):
                 await self.bot.answer_callback_query(c.id, text='Delete')
             if 'content_control_next' in c.data:
                 await self.next_content_control(c.message, c)
-
                 await self.bot.answer_callback_query(c.id, text='next')
-
+            if 'mem_next' in c.data:
+                await self.next_get_mem(c.message, c)
+                await self.bot.answer_callback_query(c.id, text='')
     @info_log_message_async
     @exception
     async def process_command_start(self, message: telebot.types.Message) -> None:
@@ -413,24 +414,49 @@ class Core(AbstractCore):
         """
         db_worker = SQLighter(config.database_name)
         is_admin_chat = db_worker.get_admin_chat(message)
-        if is_admin_chat:
-            message.chat.id == is_admin_chat[0][2]
-            chat_id = is_admin_chat[0][1]
-            x = utils.get_id_photo_for_chat(chat_id)
-            if x == None: return
-            # Выбираем случайный элемент списка
-            photo_id = x[random.randrange(0, len(x), 1)]
-            # Отсылаем в чат
-            await self.bot.send_photo(chat_id, photo=photo_id)
-        else:
-            x = utils.get_id_photo_for_chat(message.chat.id)
 
-            if x == None: return
-            # Выбираем случайный элемент списка
-            photo_id = x[random.randrange(0, len(x), 1)]
-            # Отсылаем в чат
-            await self.bot.send_photo(message.chat.id, photo=photo_id)
+        chat_id = is_admin_chat[0][1]
+        x = db_worker.select_file_id_for_content_control(chat_id)
+        if not x:
+            await self.bot.send_message(message.chat.id, text='There are no images in the database')
+            return
+        photo_id = x[0][1]
 
+        markup = types.InlineKeyboardMarkup(row_width=2)
+        bt1 = types.InlineKeyboardButton('Next', callback_data='mem_next')
+        markup.add(bt1)
+
+        try:
+            await self.bot.send_photo(message.chat.id,
+                                      photo=photo_id,
+                                      reply_markup=markup)
+        except Exception as e:
+
+            await self.bot.send_message(message.chat.id, e)
+    @info_log_message_async
+    @exception
+    async def next_get_mem(self, message: telebot.types.Message, c: telebot.types.CallbackQuery ) -> None:
+        """
+        """
+        db_worker = SQLighter(config.database_name)
+
+        x = db_worker.select_file_id_for_content_control(message.chat.id)
+
+        if not x:
+            await self.bot.answer_callback_query(c.id, text='There are no images in the database')
+            return
+        photo_id = types.InputMediaPhoto(x[0][1])
+
+        markup = types.InlineKeyboardMarkup(row_width=2)
+        bt1 = types.InlineKeyboardButton('Next', callback_data='mem_next' + str('ratio_id'))
+        markup.add(bt1)
+        try:
+            await self.bot.edit_message_media(media=photo_id, chat_id=message.chat.id,
+                                              message_id=message.message_id,
+                                              reply_markup=markup)
+        except Exception as e:
+
+                await self.bot.send_message(message.chat.id, e)
     @info_log_message_async
     @exception
     async def process_get_content_control(self, message: telebot.types.Message) -> None:
