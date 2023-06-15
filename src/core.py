@@ -230,7 +230,7 @@ class Core(AbstractCore):
         async def process_callback_btn(c: types.CallbackQuery) -> None:
             """Fires when the Details button is clicked.
             """
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
 
             try:
                 db_worker.save_id_chat_callback(c)
@@ -247,7 +247,7 @@ class Core(AbstractCore):
                 if user_id is None:
                     user_id = c.from_user.id
 
-                db_worker = SQLighter(config.database_name)
+                db_worker = SQLighter(config.DATABASE_NAME)
                 like = db_worker.select_ratio_to_like_to_user(callback_ratio_id, user_id)
 
                 if like:
@@ -298,7 +298,7 @@ class Core(AbstractCore):
                 if user_id is None:
                     user_id = c.from_user.id
 
-                db_worker = SQLighter(config.database_name)
+                db_worker = SQLighter(config.DATABASE_NAME)
                 like = db_worker.select_ratio_to_dislike_to_user(callback_ratio_id, user_id)
 
                 if like == True:
@@ -372,7 +372,7 @@ class Core(AbstractCore):
     async def process_command_black_list(self, message: telebot.types.Message) -> None:
         """/black_list
             """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id_meme_chat = is_admin_chat[0][1]
@@ -401,7 +401,7 @@ class Core(AbstractCore):
         """
         Designates the current chat as the admin chat if it is not assigned
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
 
         if db_worker.set_admin_chat_in_db(message):
 
@@ -417,7 +417,7 @@ class Core(AbstractCore):
     async def process_send_mem_to_chat(self, message: telebot.types.Message) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             message.chat.id == is_admin_chat[0][2]
@@ -442,7 +442,7 @@ class Core(AbstractCore):
     async def process_get_mem(self, message: telebot.types.Message) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
 
         x = db_worker.select_file_id_for_content_control(message.chat.id)
         if not x:
@@ -466,7 +466,7 @@ class Core(AbstractCore):
     async def next_get_mem(self, message: telebot.types.Message, c: telebot.types.CallbackQuery ) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
 
         x = db_worker.select_file_id_for_content_control(message.chat.id)
 
@@ -490,7 +490,7 @@ class Core(AbstractCore):
     async def process_get_content_control(self, message: telebot.types.Message) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -518,7 +518,7 @@ class Core(AbstractCore):
     async def delete_content_control(self, message: telebot.types.Message, uniq_id: str, c: telebot.types.CallbackQuery ) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -548,7 +548,7 @@ class Core(AbstractCore):
     async def next_content_control(self, message: telebot.types.Message, c: telebot.types.CallbackQuery ) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -607,7 +607,7 @@ class Core(AbstractCore):
     async def process_command_happy1(self, message: telebot.types.Message) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -627,7 +627,7 @@ class Core(AbstractCore):
     async def process_command_happy2(self, message: telebot.types.Message) -> None:
         """
         """
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -646,7 +646,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_happy3(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -665,7 +665,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_gud(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -692,7 +692,7 @@ class Core(AbstractCore):
     @exception
     async def process_command_top(self, message: telebot.types.Message) -> None:
 
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -726,7 +726,7 @@ class Core(AbstractCore):
 
         else:
             chat_id = message.chat.id
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             top = db_worker.ratio_rating_7days(chat_id)
             db_worker.close()
             try:
@@ -760,11 +760,11 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_top7(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             top = db_worker.ratio_rating_7days(chat_id)
             db_worker.close()
 
@@ -795,7 +795,7 @@ class Core(AbstractCore):
 
         else:
             chat_id = message.chat.id
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             top = db_worker.ratio_rating_7days(chat_id)
             db_worker.close()
             try:
@@ -829,11 +829,11 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_top30(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             top = db_worker.ratio_rating_30days(chat_id)
             db_worker.close()
             try:
@@ -867,7 +867,7 @@ class Core(AbstractCore):
 
         else:
             chat_id = message.chat.id
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             top = db_worker.ratio_rating_30days(chat_id)
             db_worker.close()
             try:
@@ -901,7 +901,7 @@ class Core(AbstractCore):
                                             f'Нет ни одного мема в базе')
 
     async def process_command_tophunya(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             mem_chat = is_admin_chat[0][1]
@@ -943,7 +943,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_tophunya7(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             mem_chat = is_admin_chat[0][1]
@@ -986,7 +986,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_tophunya30(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             mem_chat = is_admin_chat[0][1]
@@ -1029,7 +1029,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_antitophunya(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             mem_chat = is_admin_chat[0][1]
@@ -1072,7 +1072,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_toplionhunya(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -1136,12 +1136,12 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_debt(self, message: telebot.types.Message) -> telebot.types.Message:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][2]
             message.chat.id = is_admin_chat[0][1]
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         users = db_worker.get_users_from_chat(message)
         debt_users = []
         for user in users:
@@ -1161,7 +1161,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_command_message(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -1206,7 +1206,7 @@ class Core(AbstractCore):
     @info_log_message_async
     @exception
     async def process_content_new_chat_members(self, message: telebot.types.Message) -> None:
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
 
         try:
             db_worker.save_id_chat(message)
@@ -1254,7 +1254,7 @@ class Core(AbstractCore):
                 x = message.photo[0].file_id
                 if x is None:
                     return
-                db_worker = SQLighter(config.database_name)
+                db_worker = SQLighter(config.DATABASE_NAME)
                 is_admin_chat = db_worker.get_admin_chat(message)
                 if is_admin_chat:
                     chat_id = is_admin_chat[0][1]
@@ -1271,11 +1271,11 @@ class Core(AbstractCore):
             if 'флюгегехаймен' in message.caption.lower():
                 return
         if message.from_user.username:
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             if db_worker.check_username_in_black_list(message.chat.id, message.from_user.username):
                 return
 
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             chat_id = is_admin_chat[0][1]
@@ -1304,7 +1304,7 @@ class Core(AbstractCore):
             if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
                 await self.bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
             else:
-                db_worker = SQLighter(config.database_name)
+                db_worker = SQLighter(config.DATABASE_NAME)
                 if hash_images in rows:
                     users = db_worker.get_users_from_chat(message)
                     debt_users = []
@@ -1325,12 +1325,12 @@ class Core(AbstractCore):
                         count = hash_image.CompareHash(key, hash_images)
                         if count < 2:
                             await self.bot.send_message(message.chat.id, f"Я сомневаюсь, но совпадение более 98%")
-                            db_worker = SQLighter(config.database_name)
+                            db_worker = SQLighter(config.DATABASE_NAME)
                             await self.bot.send_photo(message.chat.id, photo=db_worker.select_file_id(key))
                             db_worker.close()
                             break
                     # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
-                    db_worker = SQLighter(config.database_name)
+                    db_worker = SQLighter(config.DATABASE_NAME)
                     db_worker.insert_hash_image(hash_images, photo_id, chat_id)
         else:
 
@@ -1342,7 +1342,7 @@ class Core(AbstractCore):
                 user_id = servises.get_name(message)
             message_id = message.message_id
             chat_id = message.chat.id
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             data_id = 0
             # запись информации о меме в бд
             ratio_id = db_worker.creator_photo_ratio(message, photo_id, user_id, message_id, data_id, chat_id)
@@ -1379,7 +1379,7 @@ class Core(AbstractCore):
                 os.remove(src)
 
             # Достаем словарь хэшей, если он пуст то создаем и добавляем элемент в словарь и добавляем фото в список
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             # запись информации о меме в бд
             rows = db_worker.select_hash_images(message.chat.id)
             db_worker.close()
@@ -1388,7 +1388,7 @@ class Core(AbstractCore):
             if str(hash_images) == '1001111111111111100000000111111110000000111111111000001111111111100111111111111111111111111111111100001000001101100000000000000011111111111111110000000001111111111111111111111110000000111111111101000011111111100000111111111111000011111111111111111111111111':
                 await self.bot.send_message(message.chat.id, f"Нет сомнений, что это свежий мем!!!☝🏻")
             else:
-                db_worker = SQLighter(config.database_name)
+                db_worker = SQLighter(config.DATABASE_NAME)
                 if hash_images in rows:
                     users = db_worker.get_users_from_chat(message)
                     debt_users = []
@@ -1407,7 +1407,7 @@ class Core(AbstractCore):
 
                         count = hash_image.CompareHash(key, hash_images)
                         if count < 2:
-                            db_worker = SQLighter(config.database_name)
+                            db_worker = SQLighter(config.DATABASE_NAME)
 
                             users = db_worker.get_users_from_chat(message)
                             debt_users = []
@@ -1422,7 +1422,7 @@ class Core(AbstractCore):
                             db_worker.close()
                             break
                     # После всех проверок добаляем хеш и id изображения в словарь и в список для мемов
-                    db_worker = SQLighter(config.database_name)
+                    db_worker = SQLighter(config.DATABASE_NAME)
                     db_worker.insert_hash_image(hash_images, photo_id, message.chat.id)
                     answer = utils.get_answer_for_user(message.chat.id)
                     if answer == None:
@@ -1437,7 +1437,7 @@ class Core(AbstractCore):
     @exception
     async def process_content_video(self, message: telebot.types.Message) -> None:
         if message.from_user.username:
-            db_worker = SQLighter(config.database_name)
+            db_worker = SQLighter(config.DATABASE_NAME)
             if db_worker.check_username_in_black_list(message.chat.id, message.from_user.username):
                 return
         if message.caption:
@@ -1446,7 +1446,7 @@ class Core(AbstractCore):
             if 'флюгегехаймен' in message.caption.lower():
                 return
         video_id = message.video.file_id
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         is_admin_chat = db_worker.get_admin_chat(message)
         if is_admin_chat:
             await self.bot.send_message(message.chat.id, video_id)
@@ -1456,7 +1456,7 @@ class Core(AbstractCore):
             user_id = servises.get_name(message)
         message_id = message.message_id
         data_id = 1
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
         # запись информации о меме в бд
         ratio_id = db_worker.creator_photo_ratio(message, video_id, user_id, message_id, data_id, chat_id)
         db_worker.close()
@@ -1490,7 +1490,7 @@ class Core(AbstractCore):
         o = json.loads(n)
         d = {"message_": o}
         logging.info('User Message', extra=d)
-        db_worker = SQLighter(config.database_name)
+        db_worker = SQLighter(config.DATABASE_NAME)
 
         try:
             db_worker.save_id_chat(message)

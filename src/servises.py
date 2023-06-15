@@ -38,7 +38,7 @@ def custom_key(people):
 async def services_next_content_control(self, message: telebot.types.Message) -> None:
     """
     """
-    db_worker = SQLighter(config.database_name)
+    db_worker = SQLighter(config.DATABASE_NAME)
     is_admin_chat = db_worker.get_admin_chat(message)
     if is_admin_chat:
         chat_id = is_admin_chat[0][1]

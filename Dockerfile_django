@@ -1,0 +1,26 @@
+FROM python:3.8
+
+ENV PYTHONUNBUFFERED=1
+
+RUN mkdir /code
+WORKDIR /code
+
+RUN apt-get update #&& apt-get install -y netcat
+RUN pip install --upgrade pip
+
+COPY requirements.txt /code/requirements.txt
+RUN pip install -r requirements.txt
+
+
+COPY ./runserver.sh /
+RUN sed -i -e 's/\r$//' /runserver.sh
+RUN chmod +x /runserver.sh
+
+EXPOSE 8000
+
+COPY . /code/
+
+COPY ./entrypoint.sh /
+RUN sed -i -e 's/\r$//' /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

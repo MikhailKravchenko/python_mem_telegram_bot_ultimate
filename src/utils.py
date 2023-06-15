@@ -4,14 +4,14 @@ import shelve
 import telebot
 import config
 
-from config import shelve_name, shelve_level
+from config import SHELVE_NAME, SHELVE_LEVEL
 
 
 def set_id_photo_for_chat(chat_id, args):
     """
 
     """
-    with shelve.open(shelve_name) as storage:
+    with shelve.open(SHELVE_NAME) as storage:
         storage[str(chat_id)] = args
 
 
@@ -19,7 +19,7 @@ def get_id_photo_for_chat(chat_id):
     """
 
     """
-    with shelve.open(shelve_name) as storage:
+    with shelve.open(SHELVE_NAME) as storage:
         try:
             answer = storage[str(chat_id)]
             return answer
@@ -31,7 +31,7 @@ def set_hash_photo_for_chat(chat_id, args):
     """
 
     """
-    with shelve.open(shelve_level) as storage:
+    with shelve.open(SHELVE_LEVEL) as storage:
         storage[str(chat_id)] = args
 
 
@@ -40,7 +40,7 @@ def get_hush_photo_for_chat(chat_id):
     """
 
     """
-    with shelve.open(shelve_level) as storage:
+    with shelve.open(SHELVE_LEVEL) as storage:
         try:
             answer = storage[str(chat_id)]
             return answer
@@ -59,7 +59,7 @@ def get_answer_for_user(chat_id):
     """
 
     """
-    with shelve.open(shelve_name) as storage:
+    with shelve.open(SHELVE_NAME) as storage:
         try:
             answer = storage[str(chat_id)]
             return answer

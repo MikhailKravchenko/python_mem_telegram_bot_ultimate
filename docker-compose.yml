@@ -14,3 +14,20 @@ services:
     container_name: python_mem_telegram_bot_ultimate
 
 
+  web: &web
+    build:
+      context: .
+      dockerfile: ./Dockerfile_django
+    env_file:
+      - ./.env
+    ports:
+      - "127.0.0.1:${DOCKER_EXPOSE_PORT?8000}:${DJANGO_PORT?8000}"
+    volumes:
+      - ./src/:/code/src/
+      - ./static/:/code/static/
+      - ./media/:/code/media/
+      - ./logs:/code/logs/
+    command: /runserver.sh
+    restart: unless-stopped
+
+    container_name: python_mem_backend_web
