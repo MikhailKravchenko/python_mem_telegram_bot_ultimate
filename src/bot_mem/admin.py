@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from src.bot_mem.models import Ratio, RatioLike, RatioDislike
+from src.bot_mem.models import Ratio, RatioLike, RatioDislike, HashImage
 
 
 class RatioAdmin(admin.ModelAdmin):
@@ -66,7 +66,21 @@ class RatioDislikeAdmin(admin.ModelAdmin):
     ]
     list_per_page = 25
 
+class HashImageAdmin(admin.ModelAdmin):
+    list_display = [
+        "hash_images",
+        "file_id",
+        "chat_id",
+    ]
+    search_fields = [
+        "hash_images",
+        "file_id",
+        "chat_id",
+    ]
+    list_per_page = 25
+
 
 admin.site.register(Ratio, RatioAdmin)
 admin.site.register(RatioLike, RatioLikeAdmin)
 admin.site.register(RatioDislike, RatioDislikeAdmin)
+admin.site.register(HashImage, HashImageAdmin)
